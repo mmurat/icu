@@ -3,52 +3,16 @@ body{
 }
 
 .well{
-	margin-left: 100px;
-	margin-right: 100px;
+	margin-left: 20%;
+	margin-right: 20%;
 }
 
-ul.checkbox  {
-  margin: 0;
-  padding: 0;
-  margin-left: 20px;
-  list-style: none;
-}
-
-/*ul.checkbox li input {
-  margin-right: .25em;
-}*/
-
-/*ul.checkbox li {
-  border: 1px transparent solid;
-}*/
-
-/*ul.checkbox li label {
-  margin-left: ;
-}
-*/
-/*ul.checkbox li:hover,*/
-
-/*ul.checkbox li.focus {
-  background-color: grey;
-  border: 1px gray solid;
-  width: 12em;
-}*/
-
-.select-picker {
-	font-style: italic;
-	color: grey;
-	font-family: monospace;
-	font-size: 14px;
-}
-
-option {
-	font-style: italic;
-	color: grey;
-	font-family: monospace;
-	font-size: 14px;
-}
-
-label {
-	font-style: italic;
-	color: grey;
+input, select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }

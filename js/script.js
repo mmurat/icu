@@ -7,4 +7,10 @@ $(document).ready(function(){
           $("#hospital").show();
         }
     });
+
+    $("#newICU").click(function(event){
+        var val = $("#icuCode").val();
+        console.log(val);
+        event.preventDefault();
+    });
 });

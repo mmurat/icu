@@ -7,6 +7,7 @@
 -export([init/0, insert/0]).
 
 -define(INSURANCE, [
+	#insurance{ code = 0, name = <<"Güvence bilinmiyor"/utf8>> },
 	#insurance{ code = 1, name = <<"SGK"/utf8>> },
 	#insurance{ code = 2, name = <<"SSK"/utf8>> },
 	#insurance{ code = 3, name = <<"Emekli Sandığı"/utf8>> },
@@ -18,6 +19,7 @@
 ]).
 
 -define(ICU_TYPE, [
+	#icu_type{ code = 0, name = <<"Yoğunbakım isteği yok/bilinmiyor"/utf8>> },
 	#icu_type{ code = 1, name = <<"Yenidoğan"/utf8>> },
 	#icu_type{ code = 2, name = <<"Çocuk"/utf8>> },
 	#icu_type{ code = 3, name = <<"Dahiliye"/utf8>> },
@@ -31,6 +33,7 @@
 ]).
 
 -define(HOSPITAL, [
+		#hospital{ code = 0, name = <<"Hastane bilinmiyor/öğrenilemedi"/utf8>> },
 		#hospital{ code = 1, name = <<"ADH"/utf8>> },
 		#hospital{ code = 2, name = <<"ÇDH"/utf8>> },
 		#hospital{ code = 3, name = <<"Numune"/utf8>> },
@@ -50,6 +53,7 @@
 	]).
 
 -define(PROVINCE, [
+	 #province{ code = 0, name = <<"İl bilinmiyor/öğrenilemedi"/utf8>> },
 	 #province{ code = 1, name = <<"Adana"/utf8>> },
 	 #province{ code = 2, name = <<"Adıyaman"/utf8>> },
 	 #province{ code = 3, name = <<"Afyonkarahisar"/utf8>> },

@@ -1,4 +1,8 @@
-Mnesia.nonode@nohost/*
+Mnesia.nonode@nohost/
 js/jquery-3.1.0.min.js
+js/bootstrap.min.js
 css/bootstrap.min.css
 *.beam
+*.dump
+.idea/
+*.iml

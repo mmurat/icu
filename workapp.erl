@@ -24,34 +24,12 @@ getTable(Tab) ->
       end,
       mnesia:transaction(F).
 
-provinceDropDown() ->
-  { 'div', [{'class', "col-md-12"}], [
-    { 'div', [{'class', "form-group"}], [
-      { 'label', [{'for', "select-picker"}], <<"İl :"/utf8>> },
-      { 'select', [{'class', "select-picker"}, {'id', "province"}], [
-
-        createProvinces()
-      ]}
-    ]}
-  ]}.
-
-hospitalSelectPicker() ->
-  { 'div', [{'class', "col-md-12"}], [
-    {'div', [{'class', "form-group"}], [
-      { 'label', [{'for', "select-picker"}], <<"Hastane :"/utf8>> },
-      { 'select', [{'class', "select-picker"}], [
-        createHospitals()
-      ]}
-    ]}
-  ]}.
-
-
 %% Yoğunbakım isteğinin kayıt formu
 
 icuForm() ->
   {'div', [{'class', "well"}], [
     {'h3', [], <<"Yeni yoğunbakım araması"/utf8>> },
-      {form, [], [
+      {form, [{'action', "/"}, {'method', "post"}], [
 
         {'div', [{'class', "form-group"}], [
           { 'input', [ {'type', "number"}, {'class', "form-control"}, {'placeholder', <<"Protokol no..."/utf8>> }, {'id', "icuCode"} ], [] }
@@ -60,31 +38,53 @@ icuForm() ->
         {'div', [{'class', "form-group"}], [
           { 'input', [ {'type', "text"}, {'class', "form-control"}, {'placeholder', <<"Ad..."/utf8>> }, {'id', "icuName"} ], [] }
         ]},
-        { 'div', [{'class', "row"}], [
-          { 'div', [{'class', "col-md-3"} ], [
-            { 'div', [{'class', "row"}, {'align', "right" }], [
 
-                provinceDropDown()
-            ]},
-            { 'div', [{'class', "row"}, {'id', "hospital" }, {'align', "right" } ], [
-                hospitalSelectPicker()
-            ]}
-          ]},
-          {'div', [{'class', "col-md-9"}], [
-          {'div', [{'class', "form-group"}], [
-            { 'label', [{'class', "control-label"}], <<"Yoğunbakım "/utf8>> },
-            { 'div', [{'class', "checkbox"}], [
-              { 'ul', [{'class', "checkbox"}], [
-                  createIcuTypes()
-            ]}
+        { 'div', [{'class', "form-group"}], [
+%%          { 'label', [{'for', "province"}], <<"İl"/utf8>> },
+          { 'select', [{'class', "select-picker"}, {'id', "province"}], [
+            createProvinces()
           ]}
-        ]}
+        ]},
+
+        { 'div', [{'class', "form-group"}, {'id', "hospital"}], [
+%%          { 'label', [{'for', "hospital"}], <<"Hastane"/utf8>> },
+          { 'select', [{'class', "select-picker"}], [
+            createHospitals()
+          ]}
+        ]},
+
+        {'div', [{'class', "form-group"}], [
+%%          { 'label', [{'for', "icu"}], <<"Yoğunbakım"/utf8>> },
+          { 'select', [{'class', "select-picker"}, {'id', "icu"}], [
+            createIcuTypes()
+          ]}
+        ]},
+
+        {'div', [{'class', "form-group"}], [
+%%          { 'label', [{'for', "insurance"}], <<"Güvence"/utf8>> },
+          { 'select', [{'class', "select-picker"}, {'id', "insurance"}], [
+            createInsurances()
+          ]}
+        ]},
+
+      {'div', [{'class', "form-group"}], [
+        { 'button', [{'class', "btn btn-lg btn-primary btn-block"}, {'type', "submit"}, {'id', "newICU"}], <<"Kayıt"/utf8>>}
       ]}
-    ]}
-    ]}
+      ]}
   ]}.
 
 %% Yoğunbakım listesinin tablodan okunup kayıt formuna ekleme
+
+
+
+createInsurances() ->
+  { atomic, InsuranceList } = getTable(insurance),
+  SInsuranceList = lists:sort(InsuranceList),
+  [ createInsurance(I#insurance.code, I#insurance.name ) || I <- SInsuranceList ].
+
+createInsurance(Code, Name) ->
+  { 'option', [ {'class', "form-control"}, { 'name', Code }, { 'value', Code }], Name }.
+
 
 createIcuTypes() ->
   { atomic, IcuTypeList } = getTable(icu_type),
@@ -92,12 +92,7 @@ createIcuTypes() ->
   [ createIcuType( I#icu_type.code, I#icu_type.name ) || I <- SIcuTypeList ].
 
 createIcuType(Code, Name) ->
-  {'li', [], [
-    { 'label', [], [
-      { 'input', [ {'type', "checkbox"}, { 'name', Code }, { 'value', Code } ]},
-      Name
-    ]}
-  ]}.
+      { 'option', [ {'class', "form-control"}, { 'name', Code }, { 'value', Code }], Name }.
 
 %% İl listesinin tablodan okunup kayıt formuna ekleme
 
@@ -149,7 +144,13 @@ navbar() ->
         ]
       }.
 
-out(_Arg) ->
+
+handle('POST',Arg) ->
+  L = yaws_api:parse_post(Arg),
+  io:format("~p", [L]);
+
+handle('GET', _Arg) ->
+
   [
     { ehtml,
       [
@@ -164,3 +165,16 @@ out(_Arg) ->
     { header, {content_type, erase} },
     { header, {content_type, "text/html; charset=UTF-8"} }
   ].
+
+
+method(Arg) ->
+  Rec = Arg#arg.req,
+  Rec#http_request.method.
+
+
+out(Arg) ->
+  Method = method(Arg),
+  io:format("~p: ~p ~p Request ~n", [?MODULE, ?LINE, Method]),
+  handle(Method, Arg).
+
+
