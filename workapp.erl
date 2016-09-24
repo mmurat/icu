@@ -29,40 +29,40 @@ getTable(Tab) ->
 icuForm() ->
   {'div', [{'class', "well"}], [
     {'h3', [], <<"Yeni yoğunbakım araması"/utf8>> },
-      {form, [{'action', "/"}, {'method', "post"}], [
+      {form, [{'action', "/newICU"}, {'method', "post"}], [
 
         {'div', [{'class', "form-group"}], [
-          { 'input', [ {'type', "number"}, {'class', "form-control"}, {'placeholder', <<"Protokol no..."/utf8>> }, {'id', "icuCode"} ], [] }
+          { 'input', [ {'name', "icuCode"}, {'type', "number"}, {'class', "form-control"}, {'placeholder', <<"Protokol no..."/utf8>> }, {'id', "icuCode"} ], [] }
         ]},
 
         {'div', [{'class', "form-group"}], [
-          { 'input', [ {'type', "text"}, {'class', "form-control"}, {'placeholder', <<"Ad..."/utf8>> }, {'id', "icuName"} ], [] }
+          { 'input', [ {'name', "icuName"}, {'type', "text"}, {'class', "form-control"}, {'placeholder', <<"Ad..."/utf8>> }, {'id', "icuName"} ], [] }
         ]},
 
         { 'div', [{'class', "form-group"}], [
 %%          { 'label', [{'for', "province"}], <<"İl"/utf8>> },
-          { 'select', [{'class', "select-picker"}, {'id', "province"}], [
+          { 'select', [ {'name', "icuProvince"}, {'class', "select-picker"}, {'id', "province"}, {'class', "form-control"}], [
             createProvinces()
           ]}
         ]},
 
-        { 'div', [{'class', "form-group"}, {'id', "hospital"}], [
+        { 'div', [{'class', "form-group"}], [
 %%          { 'label', [{'for', "hospital"}], <<"Hastane"/utf8>> },
-          { 'select', [{'class', "select-picker"}], [
+          { 'select', [ {'name', "icuHospital"}, {'class', "select-picker"}, {'id', "hospital"}, {'class', "form-control"}], [
             createHospitals()
           ]}
         ]},
 
         {'div', [{'class', "form-group"}], [
 %%          { 'label', [{'for', "icu"}], <<"Yoğunbakım"/utf8>> },
-          { 'select', [{'class', "select-picker"}, {'id', "icu"}], [
+          { 'select', [ {'name', "icuICU"}, {'class', "select-picker"}, {'id', "icu"}, {'class', "form-control"}], [
             createIcuTypes()
           ]}
         ]},
 
         {'div', [{'class', "form-group"}], [
 %%          { 'label', [{'for', "insurance"}], <<"Güvence"/utf8>> },
-          { 'select', [{'class', "select-picker"}, {'id', "insurance"}], [
+          { 'select', [ {'name', "icuInsurance"}, {'class', "select-picker"}, {'id', "insurance"}, {'class', "form-control"}], [
             createInsurances()
           ]}
         ]},
@@ -74,8 +74,6 @@ icuForm() ->
   ]}.
 
 %% Yoğunbakım listesinin tablodan okunup kayıt formuna ekleme
-
-
 
 createInsurances() ->
   { atomic, InsuranceList } = getTable(insurance),
@@ -117,6 +115,7 @@ createHospital(Code, Name) ->
 %% Navbar
 
 navbar() ->
+
       {'nav', [{'class', "navbar navbar-default navbar-fixed-bottom"}],
         [
           {'div', [{'class', "container-fluid"}], [
@@ -144,10 +143,15 @@ navbar() ->
         ]
       }.
 
-
 handle('POST',Arg) ->
   L = yaws_api:parse_post(Arg),
-  io:format("~p", [L]);
+  io:format("~p", [L]),
+  [{status, 201},
+  {html, Arg#arg.clidata},
+  {header, {content_type, erase}},
+  {header, {content_type, "text/html; charset=UTF-8"}}
+  ];
+
 
 handle('GET', _Arg) ->
 
@@ -176,5 +180,3 @@ out(Arg) ->
   Method = method(Arg),
   io:format("~p: ~p ~p Request ~n", [?MODULE, ?LINE, Method]),
   handle(Method, Arg).
-
-

@@ -30,31 +30,36 @@
 
 -record(icu, {
 	code,
-	date,
-	name
+  name,
+  province,
+  hospital,
+  insurance,
+  user,
+  success,
+  date
 }).
 
 %% -- relationships
 
--record(icu_province, {
-		icu,
-		province = 1
-}).
+%% -record(icu_province, {
+%% icu,
+%%		province = 1
+%%}).
 
--record(icu_hospital, {
-	icu,
-	hospital			
-}).
+%%-record(icu_hospital, {
+%%	icu,
+%%	hospital
+%%}).
 
--record(icu_insurance, {
-	icu,
-	insurance
-}).
+%%-record(icu_insurance, {
+%%	icu,
+%%	insurance
+%%}).
 
--record(icu_search, {
-	icu,
-	icu_types = [],
-	icu_hospital,
-	date,
-	user
-	}).
+%%-record(icu_search, {
+%%	icu,
+%%	icu_type,
+%%	icu_hospital,
+%%	date,
+%%	user
+%%}).
