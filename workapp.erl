@@ -15,14 +15,88 @@ header() ->
     {'link', [{'rel', "stylesheet"}, {'href', "css/style.css"}]}
   ]}.
 
-%% Tab -> tablosunun tüm kayıtları
+%% Table -> tablosunun tüm kayıtları
 
-getTable(Tab) ->
-  F = fun() ->
-        Q = qlc:q([ I || I <- mnesia:table(Tab) ]),
+getTable(Table) ->
+  Fun = fun() ->
+        Q = qlc:q([ I || I <- mnesia:table(Table) ]),
         qlc:e(Q)
       end,
-      mnesia:transaction(F).
+      mnesia:transaction(Fun).
+
+%% Table dan Code index' li kayıt
+
+getRecord(Table, Code) ->
+  Fun = fun() -> mnesia:read(Table, Code) end,
+  {atomic, [Return | _ ] } = mnesia:transaction(Fun),
+
+  case Table of
+    province ->
+      Return#province.name;
+    hospital ->
+      Return#hospital.name;
+    icu_type ->
+      Return#icu_type.name;
+    insurance ->
+      Return#insurance.name;
+    user ->
+      Return#user.name
+    end.
+
+%% Yoğunbakim tablosunun listesi
+
+icuTable() ->
+  {'div', ['class', "well"], [
+    {'table', [{'class', "table table-bordered table-hover"}], [
+      {'thead', [], [
+        {'tr', [], [
+          {'th', [], [
+            <<"Kayıt No"/utf8>>
+          ]},
+          {'th', [], [
+            <<"Ad"/utf8>>
+          ]},
+          {'th', [], [
+            <<"İl"/utf8>>
+          ]},
+          {'th', [], [
+            <<"Hastane"/utf8>>
+          ]},
+          {'th', [], [
+            <<"Yoğunbakım"/utf8>>
+          ]},
+          {'th', [], [
+            <<"Güvence"/utf8>>
+          ]},
+          {'th', [], [
+            <<"Yerleşti"/utf8>>
+          ]},
+          {'th', [], [
+            <<"Tarih"/utf8>>
+          ]},
+          {'th', [], [
+            <<"Kullanıcı"/utf8>>
+          ]}
+        ]}
+      ]},
+      {'tbody', [],
+          createIcuTableRow()
+      }
+      ]}
+      ]}.
+
+  createIcuTableRow() ->
+    IcuList = getTable(icu),
+    [{'tr', [], [
+      {'td', [], I#icu.code },
+      {'td', [], I#icu.name },
+      {'td', [], getRecord(province, I#icu.province) },
+      {'td', [], getRecord(hospital, I#icu.hospital) },
+      {'td', [], getRecord(icu, I#icu.icu_type) },
+      {'td', [], getRecord(insurance, I#icu.insurance) },
+      {'td', [], getRecord(hospital, I#icu.success) },
+      {'td', [], I#icu.date },
+      {'td', [], getRecord(user, I#icu.user)} ] } || I <- IcuList ].
 
 %% Yoğunbakım isteğinin kayıt formu
 
@@ -195,6 +269,7 @@ handle('GET', _Arg) ->
         header(),
         navbar(),
         icuForm(),
+        icuTable(),
 
         {'script', [{'type', "text/javascript"}, {'src', "js/jquery-3.1.0.min.js"}], []},
         {'script', [{'type', "text/javascript"}, {'src', "js/script.js"}], []}
