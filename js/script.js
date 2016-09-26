@@ -22,7 +22,7 @@ $(document).ready(function(){
 //
 //         $.ajax({
 //           type: "POST",
-//           url: "/newICU/" + newICU.code,
+//           url: "",
 //           data: newICU,
 //           cache: false,
 //           success: function(data) {
@@ -33,6 +33,6 @@ $(document).ready(function(){
 //             },
 //           dataType: "json"
 //         });
-  //       event.preventDefault();
+//  event.preventDefault();
     });
 });

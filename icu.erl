@@ -157,28 +157,28 @@ init() ->
 	mnesia:create_table(icu,
 		[{attributes, record_info(fields, icu)}]),
 
-	mnesia:create_table(icu_province,
-		[{attributes, record_info(fields, icu_province)}]),
-
-	mnesia:create_table(icu_hospital,
-		[{attributes, record_info(fields, icu_hospital)}]),
-
-	mnesia:create_table(icu_insurance,
-		[{attributes, record_info(fields, icu_insurance)}]),
-
-	mnesia:create_table(icu_search,
-		[{attributes, record_info(fields, icu_search)}]),
+	% mnesia:create_table(icu_province,
+	% 	[{attributes, record_info(fields, icu_province)}]),
+	%
+	% mnesia:create_table(icu_hospital,
+	% 	[{attributes, record_info(fields, icu_hospital)}]),
+	%
+	% mnesia:create_table(icu_insurance,
+	% 	[{attributes, record_info(fields, icu_insurance)}]),
+	%
+	% mnesia:create_table(icu_search,
+	% 	[{attributes, record_info(fields, icu_search)}]),
 
 	mnesia:change_table_copy_type(user, node(), disc_copies),
 	mnesia:change_table_copy_type(hospital, node(), disc_copies),
 	mnesia:change_table_copy_type(province, node(), disc_copies),
 	mnesia:change_table_copy_type(icu_type, node(), disc_copies),
 	mnesia:change_table_copy_type(insurance, node(), disc_copies),
-	mnesia:change_table_copy_type(icu, node(), disc_copies),
-	mnesia:change_table_copy_type(icu_province, node(), disc_copies),
-	mnesia:change_table_copy_type(icu_hospital, node(), disc_copies),
-	mnesia:change_table_copy_type(icu_insurance, node(), disc_copies),
-	mnesia:change_table_copy_type(icu_search, node(), disc_copies).
+	mnesia:change_table_copy_type(icu, node(), disc_copies).
+	% mnesia:change_table_copy_type(icu_province, node(), disc_copies),
+	% mnesia:change_table_copy_type(icu_hospital, node(), disc_copies),
+	% mnesia:change_table_copy_type(icu_insurance, node(), disc_copies),
+	% mnesia:change_table_copy_type(icu_search, node(), disc_copies).
 
 insert() ->
 

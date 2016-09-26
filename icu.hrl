@@ -1,29 +1,29 @@
 
 %% -*- coding: utf-8 -*-
 
-%% -- entities 
+%% -- entities
 
 -record(user, {
 	code,
 	name
 	}).
 
--record(hospital, { 
+-record(hospital, {
 	code,
 	name
 }).
 
--record(province, { 
+-record(province, {
 	code,
 	name
 }).
 
--record(icu_type, { 
+-record(icu_type, {
 	code,
 	name
 }).
 
--record(insurance, { 
+-record(insurance, {
 	code,
 	name
 }).
@@ -34,6 +34,7 @@
   province,
   hospital,
   insurance,
+	icu_type,
   user,
   success,
   date

@@ -29,7 +29,8 @@ getTable(Tab) ->
 icuForm() ->
   {'div', [{'class', "well"}], [
     {'h3', [], <<"Yeni yoğunbakım araması"/utf8>> },
-      {form, [{'action', "/newICU"}, {'method', "post"}], [
+    {'br', [], [] },
+      {form, [{'action', "/"}, {'method', "post"}], [
 
         {'div', [{'class', "form-group"}], [
           { 'input', [ {'name', "icuCode"}, {'type', "number"}, {'class', "form-control"}, {'placeholder', <<"Protokol no..."/utf8>> }, {'id', "icuCode"} ], [] }
@@ -68,7 +69,9 @@ icuForm() ->
         ]},
 
       {'div', [{'class', "form-group"}], [
-        { 'button', [{'class', "btn btn-lg btn-primary btn-block"}, {'type', "submit"}, {'id', "newICU"}], <<"Kayıt"/utf8>>}
+        { 'button', [{'class', "btn btn-lg btn-primary btn-block"},
+        {'type', "submit"},
+        {'id', "newICU"}], <<"Kayıt"/utf8>>}
       ]}
       ]}
   ]}.
@@ -82,7 +85,6 @@ createInsurances() ->
 
 createInsurance(Code, Name) ->
   { 'option', [ {'class', "form-control"}, { 'name', Code }, { 'value', Code }], Name }.
-
 
 createIcuTypes() ->
   { atomic, IcuTypeList } = getTable(icu_type),
@@ -143,15 +145,47 @@ navbar() ->
         ]
       }.
 
-handle('POST',Arg) ->
+
+createNewIcu([   {"icuCode", Code}, {"icuName", Name},
+                {"icuProvince", Province}, {"icuHospital", Hospital},
+                {"icuICU", IcuType}, {"icuInsurance", Insurance} ]) ->
+
+                 I_Code = list_to_integer(Code),
+                 I_Province = list_to_integer(Province),
+                 I_Hospital = list_to_integer(Hospital),
+                 I_IcuType = list_to_integer(IcuType),
+                 I_Insurance = list_to_integer(Insurance),
+
+                  #icu{ code = I_Code,
+                          name = Name,
+                          province = I_Province,
+                          hospital = I_Hospital,
+                          insurance = I_Insurance,
+                          icu_type = I_IcuType
+                          }.
+
+handle('POST', Arg) ->
   L = yaws_api:parse_post(Arg),
   io:format("~p", [L]),
-  [{status, 201},
-  {html, Arg#arg.clidata},
-  {header, {content_type, erase}},
-  {header, {content_type, "text/html; charset=UTF-8"}}
-  ];
 
+  NewIcu = createNewIcu(L),
+  io:format("~p", [NewIcu]),
+
+  case (NewIcu#icu.code > 0) of
+    true ->
+      Fun = fun() -> mnesia:write(NewIcu) end,
+      mnesia:transaction(Fun),
+      handle('GET', Arg);
+
+    false ->
+      handle('GET', Arg)
+    end;
+
+  % [{status, 201},
+  % {html, Arg#arg.clidata},
+  % {header, {content_type, erase}},
+  % {header, {content_type, "text/html; charset=UTF-8"}}
+  % ];
 
 handle('GET', _Arg) ->
 
@@ -170,11 +204,9 @@ handle('GET', _Arg) ->
     { header, {content_type, "text/html; charset=UTF-8"} }
   ].
 
-
 method(Arg) ->
   Rec = Arg#arg.req,
   Rec#http_request.method.
-
 
 out(Arg) ->
   Method = method(Arg),
