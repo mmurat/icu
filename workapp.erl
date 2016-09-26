@@ -26,22 +26,19 @@ getTable(Table) ->
 
 %% Table dan Code index' li kayıt
 
+getRecord(_Table, undefined) ->
+  <<"Kayıt Yok"/utf8>>;
+
 getRecord(Table, Code) ->
   Fun = fun() -> mnesia:read(Table, Code) end,
-  {atomic, [Return | _ ] } = mnesia:transaction(Fun),
+  getName(mnesia:transaction(Fun)).
 
-  case Table of
-    province ->
-      Return#province.name;
-    hospital ->
-      Return#hospital.name;
-    icu_type ->
-      Return#icu_type.name;
-    insurance ->
-      Return#insurance.name;
-    user ->
-      Return#user.name
-    end.
+
+getName({atomic, [{_Table, _Code, Return}]}) ->
+  Return;
+
+getName({atomic, []}) ->
+  <<"Kayıt Yok"/utf8>>.
 
 %% Yoğunbakim tablosunun listesi
 
@@ -86,17 +83,26 @@ icuTable() ->
       ]}.
 
   createIcuTableRow() ->
-    IcuList = getTable(icu),
+    {atomic, IcuList } = getTable(icu),
+
+    RIcuList = lists:reverse(IcuList),
+
+
     [{'tr', [], [
-      {'td', [], I#icu.code },
+      {'td', [], integer_to_list(I#icu.code) },
       {'td', [], I#icu.name },
       {'td', [], getRecord(province, I#icu.province) },
       {'td', [], getRecord(hospital, I#icu.hospital) },
-      {'td', [], getRecord(icu, I#icu.icu_type) },
+      {'td', [], getRecord(icu_type, I#icu.icu_type) },
       {'td', [], getRecord(insurance, I#icu.insurance) },
-      {'td', [], getRecord(hospital, I#icu.success) },
-      {'td', [], I#icu.date },
-      {'td', [], getRecord(user, I#icu.user)} ] } || I <- IcuList ].
+      {'td', [], getRecord(hospital, I#icu.hospital) },
+      {'td', [], formatDate(I#icu.date) },
+      {'td', [], getRecord(user, I#icu.user)}
+      ] } || I <- RIcuList ].
+
+
+formatDate( {_Date={Year,Month,Day},_Time={Hour,Minutes, _Seconds}}) ->
+  integer_to_list(Day) ++ "/" ++ integer_to_list(Month) ++ "/" ++ integer_to_list(Year) ++ " " ++ integer_to_list(Hour) ++ ":" ++ integer_to_list(Minutes).
 
 %% Yoğunbakım isteğinin kayıt formu
 
@@ -235,15 +241,14 @@ createNewIcu([   {"icuCode", Code}, {"icuName", Name},
                           province = I_Province,
                           hospital = I_Hospital,
                           insurance = I_Insurance,
-                          icu_type = I_IcuType
+                          icu_type = I_IcuType,
+                          date = erlang:localtime()
                           }.
 
 handle('POST', Arg) ->
   L = yaws_api:parse_post(Arg),
-  io:format("~p", [L]),
 
   NewIcu = createNewIcu(L),
-  io:format("~p", [NewIcu]),
 
   case (NewIcu#icu.code > 0) of
     true ->

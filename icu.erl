@@ -6,6 +6,12 @@
 
 -export([init/0, insert/0]).
 
+
+-define(USER, [
+	#user{ code = 0, name = <<"Kullanıcı Kaydı Yok"/utf8>> },
+	#user{ code = 1, name = <<"Murat Arıca"/utf8>> }
+]).
+
 -define(INSURANCE, [
 	#insurance{ code = 0, name = <<"Güvence bilinmiyor"/utf8>> },
 	#insurance{ code = 1, name = <<"SGK"/utf8>> },
@@ -19,7 +25,7 @@
 ]).
 
 -define(ICU_TYPE, [
-	#icu_type{ code = 0, name = <<"Yoğunbakım isteği yok/bilinmiyor"/utf8>> },
+	#icu_type{ code = 0, name = <<"Olumsuz/Yoğunbakım isteği yok/bilinmiyor"/utf8>> },
 	#icu_type{ code = 1, name = <<"Yenidoğan"/utf8>> },
 	#icu_type{ code = 2, name = <<"Çocuk"/utf8>> },
 	#icu_type{ code = 3, name = <<"Dahiliye"/utf8>> },
@@ -155,7 +161,8 @@ init() ->
 		[{attributes, record_info(fields, insurance)}]),
 
 	mnesia:create_table(icu,
-		[{attributes, record_info(fields, icu)}]),
+		[{attributes, record_info(fields, icu)},
+		 {type, ordered_set} ]),
 
 	% mnesia:create_table(icu_province,
 	% 	[{attributes, record_info(fields, icu_province)}]),
@@ -186,7 +193,8 @@ insert() ->
 		write(?PROVINCE),
 		write(?HOSPITAL),
 		write(?ICU_TYPE),
-		write(?INSURANCE)
+		write(?INSURANCE),
+		write(?USER)
 	end,
 	mnesia:transaction(Fun).
 

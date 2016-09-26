@@ -35,8 +35,8 @@
   hospital,
   insurance,
 	icu_type,
-  user,
-  success,
+  user = 0,
+  success = 0,
   date
 }).
 
