@@ -1,14 +1,61 @@
-$(document).ready(function(){
+
+
+$(document).ready(function() {
+
+  var table = $('#example').DataTable({
+    "language": {
+    "search": "Filtrele..."
+    },
+    "paging":   false,
+    "ordering": false,
+    "info":     false
+  });
+
+
+  $('#example tbody').on('click', 'tr', function () {
+    var data = table.row( this ).data();
+    table.$('tr.info').removeClass('info');
+    $(this).addClass('info');
+
+    console.log( 'You clicked on '+data[0]+'\'s row' );
+  });
+
+
     $("#province").click(function(){
         var  val = $(":selected").attr('value');
         if (val != 1)  {
-          $("#hospital").hide();
+          $("#hospital_div").hide();
         } else {
-          $("#hospital").show();
+          $("#hospital_div").show();
         }
     });
 
-   $("#newICU").click(function(event){
+  $( "#icuCode" ).focusout(function() {
+      Val = $.isNumeric($("#icuCode").val());
+
+      if(Val) {
+        $.ajax({
+            type: "GET",
+            url: "/",
+            data: $("#icuCode").val(),
+            cache: false,
+            success: function(data) {
+              console.log(data);
+           },
+            dataType: "json"
+          });
+        }
+      console.log(Val);
+  });
+
+  });
+
+
+
+
+
+
+//   $("#newICU").click(function(event){
 //
 //         var newICU = {
 //                 "data": "newICU",
@@ -34,5 +81,4 @@ $(document).ready(function(){
 //           dataType: "json"
 //         });
 //  event.preventDefault();
-    });
-});
+//    });

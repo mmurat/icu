@@ -31,12 +31,12 @@
 -record(icu, {
 	code,
   name,
-  province,
-  hospital,
-  insurance,
-	icu_type,
+  province = 0,
+  hospital = 0,
+  insurance = 0,
+	icu_type = 0,
   user = 0,
-  success = 0,
+  success = 100,
   date
 }).
 

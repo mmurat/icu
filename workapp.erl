@@ -11,8 +11,9 @@
 header() ->
 
   {'head', [], [
-    {'link', [{'rel', "stylesheet"}, {'href', "css/bootstrap.min.css"}]},
-    {'link', [{'rel', "stylesheet"}, {'href', "css/style.css"}]}
+    {'link',  [{'rel', "stylesheet"}, {'href', "css/bootstrap.min.css"}]},
+    {link,    [{'rel', "stylsheet"}, {'href', "jquery.dataTables.min.css" }]},
+    {'link',  [{'rel', "stylesheet"}, {'href', "css/style.css"}]}
   ]}.
 
 %% Table -> tablosunun tüm kayıtları
@@ -43,8 +44,8 @@ getName({atomic, []}) ->
 %% Yoğunbakim tablosunun listesi
 
 icuTable() ->
-  {'div', ['class', "well"], [
-    {'table', [{'class', "table table-bordered table-hover"}], [
+  {'div', [{'class', "container list"}], [
+    {'table', [{'class', "table table-bordered table-condensed" } , {'id', "example"}, {'cellspacing', "0"}, {'width', "100%"}], [
       {'thead', [], [
         {'tr', [], [
           {'th', [], [
@@ -87,7 +88,6 @@ icuTable() ->
 
     RIcuList = lists:reverse(IcuList),
 
-
     [{'tr', [], [
       {'td', [], integer_to_list(I#icu.code) },
       {'td', [], I#icu.name },
@@ -97,7 +97,7 @@ icuTable() ->
       {'td', [], getRecord(insurance, I#icu.insurance) },
       {'td', [], getRecord(hospital, I#icu.hospital) },
       {'td', [], formatDate(I#icu.date) },
-      {'td', [], getRecord(user, I#icu.user)}
+      {'td', [], getRecord(user, I#icu.user) }
       ] } || I <- RIcuList ].
 
 
@@ -107,7 +107,7 @@ formatDate( {_Date={Year,Month,Day},_Time={Hour,Minutes, _Seconds}}) ->
 %% Yoğunbakım isteğinin kayıt formu
 
 icuForm() ->
-  {'div', [{'class', "well"}], [
+  {'div', [{'class', "well save"}], [
     {'h3', [], <<"Yeni yoğunbakım araması"/utf8>> },
     {'br', [], [] },
       {form, [{'action', "/"}, {'method', "post"}], [
@@ -121,30 +121,44 @@ icuForm() ->
         ]},
 
         { 'div', [{'class', "form-group"}], [
-%%          { 'label', [{'for', "province"}], <<"İl"/utf8>> },
+          { 'label', [{'for', "province"}], <<"İl..."/utf8>> },
           { 'select', [ {'name', "icuProvince"}, {'class', "select-picker"}, {'id', "province"}, {'class', "form-control"}], [
             createProvinces()
           ]}
         ]},
 
-        { 'div', [{'class', "form-group"}], [
-%%          { 'label', [{'for', "hospital"}], <<"Hastane"/utf8>> },
+        { 'div', [{'class', "form-group"}, {'id', "hospital_div" }], [
+          { 'label', [{'for', "hospital"}], <<"Hastane..."/utf8>> },
           { 'select', [ {'name', "icuHospital"}, {'class', "select-picker"}, {'id', "hospital"}, {'class', "form-control"}], [
             createHospitals()
           ]}
         ]},
 
         {'div', [{'class', "form-group"}], [
-%%          { 'label', [{'for', "icu"}], <<"Yoğunbakım"/utf8>> },
+          { 'label', [{'for', "icu"}], <<"Yoğunbakım..."/utf8>> },
           { 'select', [ {'name', "icuICU"}, {'class', "select-picker"}, {'id', "icu"}, {'class', "form-control"}], [
             createIcuTypes()
           ]}
         ]},
 
         {'div', [{'class', "form-group"}], [
-%%          { 'label', [{'for', "insurance"}], <<"Güvence"/utf8>> },
+          { 'label', [{'for', "insurance"}], <<"Güvence..."/utf8>> },
           { 'select', [ {'name', "icuInsurance"}, {'class', "select-picker"}, {'id', "insurance"}, {'class', "form-control"}], [
             createInsurances()
+          ]}
+        ]},
+
+        {'div', [{'class', "form-group"}], [
+          { 'label', [{'for', "success"}], <<"Yerleşti..."/utf8>> },
+          { 'select', [ {'name', "icuSuccess"}, {'class', "select-picker"}, {'id', "success"}, {'class', "form-control"}], [
+            createHospitals()
+          ]}
+        ]},
+
+        {'div', [{'class', "form-group"}], [
+          { 'label', [{'for', "success"}], <<"Kullanıcı..."/utf8>> },
+          { 'select', [ {'name', "icuUser"}, {'class', "select-picker"}, {'id', "user"}, {'class', "form-control"}], [
+            createUsers()
           ]}
         ]},
 
@@ -165,6 +179,14 @@ createInsurances() ->
 
 createInsurance(Code, Name) ->
   { 'option', [ {'class', "form-control"}, { 'name', Code }, { 'value', Code }], Name }.
+
+  createUsers() ->
+    { atomic, UserList } = getTable(user),
+    SUserList = lists:sort(UserList),
+    [ createUser(I#user.code, I#user.name ) || I <- SUserList ].
+
+  createUser(Code, Name) ->
+    { 'option', [ {'class', "form-control"}, { 'name', Code }, { 'value', Code }], Name }.
 
 createIcuTypes() ->
   { atomic, IcuTypeList } = getTable(icu_type),
@@ -198,7 +220,7 @@ createHospital(Code, Name) ->
 
 navbar() ->
 
-      {'nav', [{'class', "navbar navbar-default navbar-fixed-bottom"}],
+      {'nav', [{'class', "navbar navbar-default navbar-fixed-top"}],
         [
           {'div', [{'class', "container-fluid"}], [
             {'div', [{'class', "navbar-header"}], [
@@ -225,16 +247,17 @@ navbar() ->
         ]
       }.
 
-
 createNewIcu([   {"icuCode", Code}, {"icuName", Name},
                 {"icuProvince", Province}, {"icuHospital", Hospital},
-                {"icuICU", IcuType}, {"icuInsurance", Insurance} ]) ->
+                {"icuICU", IcuType}, {"icuInsurance", Insurance}, {"icuSuccess", Success}, {"icuUser", User} ]) ->
 
                  I_Code = list_to_integer(Code),
                  I_Province = list_to_integer(Province),
                  I_Hospital = list_to_integer(Hospital),
                  I_IcuType = list_to_integer(IcuType),
                  I_Insurance = list_to_integer(Insurance),
+                 I_Success = list_to_integer(Success),
+                 I_User = list_to_integer(User),
 
                   #icu{ code = I_Code,
                           name = Name,
@@ -242,6 +265,8 @@ createNewIcu([   {"icuCode", Code}, {"icuName", Name},
                           hospital = I_Hospital,
                           insurance = I_Insurance,
                           icu_type = I_IcuType,
+                          success = I_Success,
+                          user = I_User,
                           date = erlang:localtime()
                           }.
 
@@ -272,11 +297,13 @@ handle('GET', _Arg) ->
     { ehtml,
       [
         header(),
-        navbar(),
+      %%  navbar(),
         icuForm(),
         icuTable(),
 
-        {'script', [{'type', "text/javascript"}, {'src', "js/jquery-3.1.0.min.js"}], []},
+        {'script', [{'type', "text/javascript"}, {'src', "js/jquery-1.12.3.js"}], []},
+        {'script', [{'type', "text/javascript"}, {'src', "js/jquery.dataTables.min.js"}], []},
+        {'script', [{'type', "text/javascript"}, {'src', "js/bootstrap.min.js"}], []},
         {'script', [{'type', "text/javascript"}, {'src', "js/script.js"}], []}
       ]
     },
@@ -290,5 +317,4 @@ method(Arg) ->
 
 out(Arg) ->
   Method = method(Arg),
-  io:format("~p: ~p ~p Request ~n", [?MODULE, ?LINE, Method]),
   handle(Method, Arg).
