@@ -9,7 +9,8 @@
     <div id="container"></div>
     <script id="template" type="text/ractive">
 
-    <div class="container" style="align-self: center; margin-top:5%;">
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
         <div class="row">
         <div class="col-md-12">
 
@@ -25,50 +26,49 @@
             <th>Kullanıcı</th>
         </tr>
         <tr>
-            <td><input type="input" name="code"></td>
-            <td><input type="input" name="name"></td>
+            <td><input type="input" name="code" value={{newIcu.code}}></td>
+            <td><input type="input" name="name" value={{newIcu.name}}></td>
             <td>
-            <select value='{{selectedProvince}}' >
-                {{ #each provinceName }}
-                    <option>{{ this }}</option>
+            <select value="{{newIcu.province}}">
+                {{ #each provinceName:i }}
+                    <option value={{i}}> {{ this }}</option>
                 {{/each}}
             </select>
             </td>
             <td>
-                <select value='{{selectedHospital}}' >
-                    {{ #each hospitalName }}
-                        <option>{{ this }}</option>
+                <select value={{newIcu.province}} {{disabled}} >
+                    {{ #each hospitalName:i }}
+                        <option value={{i}}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
             <td>
-                <select value='{{ selectedIcuType }}' >
-                    {{ #each icu_typeName }}
-                        <option>{{ this }}</option>
+                <select value={{ newIcu.icu_type }} >
+                    {{ #each icu_typeName:i }}
+                        <option value={{i}}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
             <td>
-                <select value='{{selectedInsurance}}' >
-                    {{ #each insuranceName }}
-                        <option>{{ this }}</option>
+                <select value={{newIcu.insurance}}>
+                    {{ #each insuranceName:i }}
+                        <option value={{i}}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
             
             <td>
-                <select value='{{selectedSuccess}}' >
+                <select value={{newIcu.success}} >
                     {{ #each successName }}
-                        <option>{{ this }}</option>
+                        <option value={{i}}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
 
-
             <td>
-                <select value='{{selectedUser}}' >
-                    {{ #each userName }}
-                        <option>{{ this }}</option>
+                <select value={{newIcu.user}} >
+                    {{ #each userName:i }}
+                        <option value={{i}}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
@@ -77,9 +77,23 @@
 
     </div>
     </div>
+        <div class="row">
+            <div class="col-md-6">
+            <div class="btn-group btn-group-justified">
+                <a on-click="newIcu" class="btn btn-link">Yeni</a>
+                <a href="#" class="btn btn-link">Kaydet</a>
+                <a href="#" class="btn btn-link">Vazgeç</a>
+                <a href="#" class="btn btn-link">Sil</a>
+            </div>
+            </div>
+            <div class="col-md-6">
+                <p></p>
+            </div>
+        </div>
     </div>
+    </nav>
     
-    <div class="container" style="align-self: center; margin-top:5%;">
+    <div class="container" style="margin-top:10%;">
     <div class="row">
     <div class="col-md-12">
     <table class="icuTable">
@@ -137,6 +151,24 @@
         })
     };    
 
+    function postIcu(newIcu) {
+        $.ajax ({
+            type: "POST",
+            url: "/api",
+            data : newIcu,
+            data_Type: "json",
+            cache: false,
+            success: function(data) {
+                console.log(JSON.parse(data));
+                getIcu();
+            }.bind(this),
+            
+            error: function(xhr, status, err) {
+                console.log(err) ;
+            }.bind(this)
+        });
+    };
+
 
     var ractive = new Ractive({
        el: "#container",
@@ -167,7 +199,12 @@
             successName: [ "Yerleştirilemedi", "İptal", "Servis Hastası", "ADH", 
                             "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
                             "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
-                            "G. Adana", "Algomed", "Acıbadem", "Metro"]
+                            "G. Adana", "Algomed", "Acıbadem", "Metro"],
+        
+            disabled: "disabled",
+
+            selectedIcu: {},
+            newIcu: {}
         } 
 
         /*{
@@ -179,11 +216,30 @@
 
         });
  
+ractive.observe("selectedProvince", function(newValue, oldValue) {
+    if( newValue != 1) {
+        ractive.set("selectedHospital", 0);
+        ractive.set("disabled", "disabled");
+    }
+    else {
+        ractive.set("disabled", "");
+    }
+  });
+
 ractive.on( "activeIcu", function ( event ) {
     $(".selected").removeClass("selected");
     $(event.node).addClass('selected');
-//    console.log(event.node);
+ 
+    ractive.set("selectedIcu", event.context);
+    ractive.set("newIcu", event.context);
+    console.log(event.context);
 });
+
+ractive.on("newIcu", function(event) {
+    ractive.set("selectedIcu", {province: 0, hospital: 0, icu_type: 0, insurance: 0, success: 0, user: 0});
+    $(".selected").removeClass("selected");
+});
+
 
 </script>
 </body>

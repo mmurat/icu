@@ -1,4 +1,4 @@
-body{
+/*body{
 	margin-top: 50px;
 }
 
@@ -12,24 +12,27 @@ body{
 	margin-right: 5%;
 }
 
+*/
 input, select {
     width: 100%;
-    padding: 6px 6px;
-    margin: 2px 0;
+    padding: 6px 6px; */
+    margin: 2px 0; 
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
 }
 
+
 .icuTable, .icuEdit
 {
-    *border: 1px solid rgb(210,210,210);
+     *border: 1px solid rgb(210,210,210);
      border: 1px solid rgba(0,0,0,0.3);
      box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
      border-radius: 2px;
      border-spacing: 0;
  }
+
 
 .icuTable td, .icuTable th, .icuEdit th, .icuEdit td  {
     padding: 0.5em !important;
