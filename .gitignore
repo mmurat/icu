@@ -2,10 +2,9 @@ Mnesia.nonode@nohost/
 js/jquery-3.1.0.min.js
 js/bootstrap.min.js
 js/jquery-1.12.3.js
-js/jquery.dataTables.min.js
+/js/ractive.js
+/js/ractive.min.js
 css/bootstrap.min.css
-css/jquery.dataTables.css
-css/jquery.dataTables.min.css
 *.beam
 *.dump
 .idea/

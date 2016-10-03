@@ -56,7 +56,7 @@ addIcu( Code, Name, Province, Hospital, Insurance, IcuType, Success, User ) ->
   {atomic, _Rec} = mnesia:transaction(Add),
   NewRec.
 
-  handle('GET', _Arg) ->
+  handle('GET', Arg) ->
     io:format("~n ~p:~p GET Request ~n", [?MODULE, ?LINE]),
     Fun = fun() ->
       Q = qlc:q([X || X <- mnesia:table(icu)]),
@@ -66,7 +66,15 @@ addIcu( Code, Name, Province, Hospital, Insurance, IcuType, Success, User ) ->
 
     Json = convert_to_json(Records),
     io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
-    {html, Json};
+
+    [{status, 200},
+      {header, {content_type, "text/html; charset=UTF-8"}},
+      {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
+      {html, Json}
+    ];
+      
+      
+%    {html, Json};
 
   handle('POST', Arg) ->
 

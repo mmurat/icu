@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf8" />
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="container"></div>
+    <script id="template" type="text/ractive">
+
+    <div class="container" style="align-self: center; margin-top:5%;">
+        <div class="row">
+        <div class="col-md-12">
+
+        <table class="icuEdit">
+        <tr>
+            <th>Protokol no</th>
+            <th>Adı</th>
+            <th>İl</th>
+            <th>Hastane</th>
+            <th>Yoğunbakım</th>
+            <th>Güvence</th>
+            <th>Yerleşme</th>
+            <th>Kullanıcı</th>
+        </tr>
+        <tr>
+            <td><input type="input" name="code"></td>
+            <td><input type="input" name="name"></td>
+            <td>
+            <select value='{{selectedProvince}}' >
+                {{ #each provinceName }}
+                    <option>{{ this }}</option>
+                {{/each}}
+            </select>
+            </td>
+            <td>
+                <select value='{{selectedHospital}}' >
+                    {{ #each hospitalName }}
+                        <option>{{ this }}</option>
+                    {{/each}}
+                </select>
+            </td>
+            <td>
+                <select value='{{ selectedIcuType }}' >
+                    {{ #each icu_typeName }}
+                        <option>{{ this }}</option>
+                    {{/each}}
+                </select>
+            </td>
+            <td>
+                <select value='{{selectedInsurance}}' >
+                    {{ #each insuranceName }}
+                        <option>{{ this }}</option>
+                    {{/each}}
+                </select>
+            </td>
+            
+            <td>
+                <select value='{{selectedSuccess}}' >
+                    {{ #each successName }}
+                        <option>{{ this }}</option>
+                    {{/each}}
+                </select>
+            </td>
+
+
+            <td>
+                <select value='{{selectedUser}}' >
+                    {{ #each userName }}
+                        <option>{{ this }}</option>
+                    {{/each}}
+                </select>
+            </td>
+        </tr>
+        </table>
+
+    </div>
+    </div>
+    </div>
+    
+    <div class="container" style="align-self: center; margin-top:5%;">
+    <div class="row">
+    <div class="col-md-12">
+    <table class="icuTable">
+        <tr>
+            <th>Protokol no</th>
+            <th>Adı</th>
+            <th>İl</th>
+            <th>Hastane</th>
+            <th>Yoğunbakım</th>
+            <th>Güvence</th>
+            <th>Yerleşme</th>
+            <th>Tarih</th>
+            <th>Kullanıcı</th>
+        </tr>
+        
+    {{ #each icu.data }}
+        <tr on-click="activeIcu">
+            <td style="text-align:right;">{{ code }}</td>
+            <td>{{ name }}</td>
+            <td>{{ provinceName[province] }}</td>
+            <td>{{ hospitalName[hospital] }}</td>
+            <td>{{ icu_typeName[icu_type] }}</td>
+            <td>{{ insuranceName[insurance] }}</td>
+            <td>{{ successName[success] }}</td>
+            <td>{{ date }}</td>
+            <td>{{ userName[user] }}</td>
+        </tr>
+    {{ /each }}
+
+    </table>
+    </div>
+    </div>
+    </div>
+    </script>
+
+<script src='js/jquery-1.12.3.js'></script>
+<script src='js/ractive.min.js'></script>
+
+<script>
+    
+    function getIcu() {
+        $.ajax({
+            url: "/api",
+            data_Type: "json",
+            cache: false,
+            success: function(data) {
+                console.log(JSON.parse(data));
+               ractive.set("icu", JSON.parse(data));
+
+            }.bind(this),
+            
+            error: function(xhr, status, err) {
+                console.log(err) ;
+            }.bind(this)
+        })
+    };    
+
+
+    var ractive = new Ractive({
+       el: "#container",
+        template: "#template",
+        data: { 
+
+            icu: getIcu(),
+            insuranceName: [ "Bilinmiyor", "SGK", "SSK", "Emekli Sandığı", "Bağkur", "Yeşilkart", "18 yaş altı", "Güvencesiz", "Suriyeli" ],
+            userName: [ "Yok" , "Murat Arıca" ],
+            icu_typeName: [ "Bilinmiyor/Yok", "Yenidoğan", "Çocuk", "Dahiliye", "Reanimasyon", "Nöroloji", "Beyin Cerrahi", "Koroner", "KVC", "Yanık", "Mikrocerrahi"],
+            hospitalName: [ "Bilinmiyor", "ADH", "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
+                            "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana", "G. Adana", "Algomed", "Acıbadem", "Metro" ],
+            
+            provinceName: ["Bilinmiyor", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya",
+                        "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl",
+                        "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", 
+                        "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum",
+                        "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkâri", "Hatay", 
+                        "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri",
+                        "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", 
+                        "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde",
+                        "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", 
+                        "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak",
+                        "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", 
+                        "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", 
+                        "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce" ],
+
+            successName: [ "Yerleştirilemedi", "İptal", "Servis Hastası", "ADH", 
+                            "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
+                            "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
+                            "G. Adana", "Algomed", "Acıbadem", "Metro"]
+        } 
+
+        /*{
+            icu: $.get("http://127.0.0.1:8000", function( icu ) {
+                console.log(icu);
+                return icu;
+                          })
+        }*/
+
+        });
+ 
+ractive.on( "activeIcu", function ( event ) {
+    $(".selected").removeClass("selected");
+    $(event.node).addClass('selected');
+//    console.log(event.node);
+});
+
+</script>
+</body>
+</html>

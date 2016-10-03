@@ -2,25 +2,6 @@
 
 $(document).ready(function() {
 
-  var table = $('#example').DataTable({
-    "language": {
-    "search": "Filtrele..."
-    },
-    "paging":   false,
-    "ordering": false,
-    "info":     false
-  });
-
-
-  $('#example tbody').on('click', 'tr', function () {
-    var data = table.row( this ).data();
-    table.$('tr.info').removeClass('info');
-    $(this).addClass('info');
-
-    console.log( 'You clicked on '+data[0]+'\'s row' );
-  });
-
-
     $("#province").click(function(){
         var  val = $(":selected").attr('value');
         if (val != 1)  {
