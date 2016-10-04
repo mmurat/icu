@@ -1,3 +1,4 @@
+
 -module(rest).
 -include("/usr/lib/yaws/include/yaws_api.hrl").
 -include_lib("stdlib/include/qlc.hrl").
@@ -21,7 +22,7 @@ method(Arg) ->
 
  convert_to_json(Lines) ->
 
- 	Data    =  [{obj,
+  Data    =  [{obj,
      [ { code,     Line#icu.code },
        { name,     Line#icu.name  },
        { province, Line#icu.province },
@@ -57,23 +58,14 @@ addIcu( Code, Name, Province, Hospital, Insurance, IcuType, Success, User ) ->
   NewRec.
 
   handle('GET', Arg) ->
-    io:format("~n ~p:~p GET Request ~n", [?MODULE, ?LINE]),
-    Fun = fun() ->
-      Q = qlc:q([X || X <- mnesia:table(icu)]),
-      qlc:e(Q)
-    end,
-    { atomic, Records } = mnesia:transaction(Fun),
 
-    Json = convert_to_json(Records),
-    io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
+    Uri = yaws_api:request_url(Arg),
+    Path = string:tokens(Uri#url.path, "/"), 
+    io:format("~p", [Path]),
+    getIcu('GET', Arg, Path);
 
-    [{status, 200},
-      {header, {content_type, "text/html; charset=UTF-8"}},
-      {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
-      {html, Json}
-    ];
-      
-      
+
+  
 %    {html, Json};
 
   handle('POST', Arg) ->
@@ -173,3 +165,43 @@ addIcu( Code, Name, Province, Hospital, Insurance, IcuType, Success, User ) ->
         end,
     {atomic, Value}   = mnesia:transaction(F),
     Value.
+
+
+    getIcu('GET', Arg, ["api"]) ->
+   
+      io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
+    
+      Fun = fun() ->
+        Q = qlc:q([X || X <- mnesia:table(icu)]),
+        qlc:e(Q)
+      end,
+      { atomic, Records } = mnesia:transaction(Fun),
+
+      Json = convert_to_json(Records),
+      io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
+
+      [{status, 200},
+        {header, {content_type, "text/html; charset=UTF-8"}},
+        {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
+        {html, Json}
+      ];
+      
+
+
+    getIcu('GET', Arg, ["api", Code]) ->
+   
+      io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
+    
+      Fun = fun() ->
+        mnesia:read({icu, list_to_integer(Code)})
+      end,
+      { atomic, Records } = mnesia:transaction(Fun),
+
+      Json = convert_to_json(Records),
+      io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
+
+      [{status, 200},
+        {header, {content_type, "text/html; charset=UTF-8"}},
+        {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
+        {html, Json}
+      ].

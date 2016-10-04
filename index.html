@@ -141,7 +141,7 @@
             cache: false,
             success: function(data) {
                 console.log(JSON.parse(data));
-               ractive.set("icu", JSON.parse(data));
+                ractive.set("icu", JSON.parse(data));
 
             }.bind(this),
             
@@ -150,6 +150,24 @@
             }.bind(this)
         })
     };    
+
+
+    function getEditIcu(code) {
+        $.ajax({
+            url: "/api/" + code,
+            data_Type: "json",
+            cache: false,
+            success: function(data) {
+                console.log(JSON.parse(data));
+                ractive.set("newIcu", JSON.parse(data));
+            }.bind(this),
+            
+            error: function(xhr, status, err) {
+                console.log(err) ;
+            }.bind(this)
+        })
+    };    
+
 
     function postIcu(newIcu) {
         $.ajax ({
@@ -204,7 +222,8 @@
             disabled: "disabled",
 
             selectedIcu: {},
-            newIcu: {}
+            newIcu: {},
+            editIcu: {}
         } 
 
         /*{
@@ -216,9 +235,9 @@
 
         });
  
-ractive.observe("selectedProvince", function(newValue, oldValue) {
+ractive.observe("newIcuProvince", function(newValue, oldValue) {
     if( newValue != 1) {
-        ractive.set("selectedHospital", 0);
+        ractive.set("newIcuHospital", 0);
         ractive.set("disabled", "disabled");
     }
     else {
@@ -229,6 +248,8 @@ ractive.observe("selectedProvince", function(newValue, oldValue) {
 ractive.on( "activeIcu", function ( event ) {
     $(".selected").removeClass("selected");
     $(event.node).addClass('selected');
+    
+    getEditIcu(event.context.code);
  
     ractive.set("selectedIcu", event.context);
     ractive.set("newIcu", event.context);
@@ -239,7 +260,6 @@ ractive.on("newIcu", function(event) {
     ractive.set("selectedIcu", {province: 0, hospital: 0, icu_type: 0, insurance: 0, success: 0, user: 0});
     $(".selected").removeClass("selected");
 });
-
 
 </script>
 </body>
