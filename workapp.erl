@@ -12,7 +12,7 @@ header() ->
 
   {'head', [], [
     {'link',  [{'rel', "stylesheet"}, {'href', "css/bootstrap.min.css"}]},
-    {link,    [{'rel', "stylsheet"}, {'href', "jquery.dataTables.min.css" }]},
+    {'link',    [{'rel', "stylsheet"}, {'href', "jquery.dataTables.min.css" }]},
     {'link',  [{'rel', "stylesheet"}, {'href', "css/style.css"}]}
   ]}.
 

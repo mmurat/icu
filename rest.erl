@@ -1,4 +1,6 @@
 
+%% -*- coding: utf-8 -*-
+
 -module(rest).
 -include("/usr/lib/yaws/include/yaws_api.hrl").
 -include_lib("stdlib/include/qlc.hrl").
@@ -16,11 +18,11 @@ method(Arg) ->
   Rec#http_request.method.
 
 
-  formatDate( {_Date={Year,Month,Day},_Time={Hour,Minutes, _Seconds}}) ->
+formatDate( {_Date={Year,Month,Day},_Time={Hour,Minutes, _Seconds}}) ->
     list_to_bitstring(integer_to_list(Day) ++ "/" ++ integer_to_list(Month) ++ "/" ++
     integer_to_list(Year) ++ " " ++ integer_to_list(Hour) ++ ":" ++ integer_to_list(Minutes)).
 
- convert_to_json(Lines) ->
+convert_to_json(Lines) ->
 
   Data    =  [{obj,
      [ { code,     Line#icu.code },
@@ -62,37 +64,35 @@ addIcu( Code, Name, Province, Hospital, Insurance, IcuType, Success, User ) ->
     Uri = yaws_api:request_url(Arg),
     Path = string:tokens(Uri#url.path, "/"), 
     io:format("~p", [Path]),
+
     getIcu('GET', Arg, Path);
 
-
-  
 %    {html, Json};
 
   handle('POST', Arg) ->
 
-    {ok, Json, _} = rfc4627:decode(Arg#arg.clidata),
-    io:format("~n~p:~p POST request ~p~n", [?MODULE, ?LINE, Json]),
+    io:format("~n~p:~p POST request ~p~n", [?MODULE, ?LINE, yaws_api:parse_post(Arg)]),
 
-     Code        = rfc4627:get_field(Json, "ncode", <<>>),
-     Name        = rfc4627:get_field(Json, "name", <<>>),
-     Province    = rfc4627:get_field(Json, "province", <<>>),
-     Hospital    = rfc4627:get_field(Json, "hospital", <<>>),
-     Insurance   = rfc4627:get_field(Json, "insurance", <<>>),
-     IcuType     = rfc4627:get_field(Json, "icu_type", <<>>),
-     Success     = rfc4627:get_field(Json, "success", <<>>),
-     User        = rfc4627:get_field(Json, "user", <<>>),
-%%    Date        = rfc4627:get_field(Json, "date", <<>>),
+    Icu = yaws_api:parse_post(Arg),
 
-    io:format("~n~p:~p POST request ~p~n", [Code, Name, Province]),
+    io:format("~n~p:~p POST request ~p~n", [?MODULE, ?LINE, Icu]),
 
-    _Status     = addIcu(Code, Name, Province, Hospital, Insurance, IcuType,
-                              Success, User ),
+  [ {"code", Code}, {"name", Name}, {"province", Province}, {"hospital", Hospital}, 
+   {"icu_type", IcuType}, {"insurance", Insurance},  {"success", Success}, {"user", User}] = Icu,
 
-    [{status, 201},
-      {html, Arg#arg.clidata},
-      {header, {content_type, erase}},
-      {header, {content_type, "text/html; charset=UTF-8"}}
-      ];
+
+    _Status     = addIcu(list_to_integer(Code), list_to_bitstring(Name), list_to_integer(Province), 
+                          list_to_integer(Hospital), list_to_integer(Insurance), list_to_integer(IcuType),
+                              list_to_integer(Success), list_to_integer(User) ),
+
+    
+    getIcu('GET', Arg, ["api"]); 
+    
+    % [{status, 201},
+    %   {html, {obj, rfc4627:encode([{data, Icu}])}},
+    %   {header, {content_type, erase}},
+    %   {header, {content_type, "text/html; charset=UTF-8"}}
+    %   ];
 
   handle('PUT', Arg) ->
     [IndexValue, _]     = string:tokens(Arg#arg.pathinfo, "/"),
@@ -177,7 +177,7 @@ addIcu( Code, Name, Province, Hospital, Insurance, IcuType, Success, User ) ->
       end,
       { atomic, Records } = mnesia:transaction(Fun),
 
-      Json = convert_to_json(Records),
+      Json = convert_to_json(lists:reverse(Records)),
       io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
 
       [{status, 200},

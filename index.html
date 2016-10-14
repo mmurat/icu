@@ -26,49 +26,49 @@
             <th>Kullanıcı</th>
         </tr>
         <tr>
-            <td><input type="input" name="code" value={{newIcu.code}}></td>
-            <td><input type="input" name="name" value={{newIcu.name}}></td>
+            <td><input on-change="editIcuCodeChange" type="number" name="code" style="text-align: right;" value={{ editIcu.code }} {{ cdisabled }}></td>
+            <td><input type="input" name="name" value={{ editIcu.name }}></td>
             <td>
-            <select value="{{newIcu.province}}">
+            <select value={{ editIcu.province }}>
                 {{ #each provinceName:i }}
                     <option value={{i}}> {{ this }}</option>
                 {{/each}}
             </select>
             </td>
             <td>
-                <select value={{newIcu.province}} {{disabled}} >
+                <select value={{ editIcu.hospital }} {{ hdisabled }}>
                     {{ #each hospitalName:i }}
                         <option value={{i}}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
             <td>
-                <select value={{ newIcu.icu_type }} >
+                <select value={{ editIcu.icu_type }} >
                     {{ #each icu_typeName:i }}
                         <option value={{i}}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
             <td>
-                <select value={{newIcu.insurance}}>
+                <select value={{ editIcu.insurance }}>
                     {{ #each insuranceName:i }}
-                        <option value={{i}}>{{ this }}</option>
+                        <option value={{ i }}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
             
             <td>
-                <select value={{newIcu.success}} >
-                    {{ #each successName }}
+                <select value={{ editIcu.success }} >
+                    {{ #each successName:i }}
                         <option value={{i}}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
 
             <td>
-                <select value={{newIcu.user}} >
+                <select value={{ editIcu.user }} >
                     {{ #each userName:i }}
-                        <option value={{i}}>{{ this }}</option>
+                        <option value={{ i }}>{{ this }}</option>
                     {{/each}}
                 </select>
             </td>
@@ -80,16 +80,21 @@
         <div class="row">
             <div class="col-md-6">
             <div class="btn-group btn-group-justified">
-                <a on-click="newIcu" class="btn btn-link">Yeni</a>
-                <a href="#" class="btn btn-link">Kaydet</a>
+                <a on-click="newIcu" class="btn btn-link" style="color: {{ color }};">Yeni</a>
+                <a on-click="saveIcu" href="#" class="btn btn-link">Kaydet</a>
                 <a href="#" class="btn btn-link">Vazgeç</a>
                 <a href="#" class="btn btn-link">Sil</a>
             </div>
             </div>
-            <div class="col-md-6">
-                <p></p>
+            <div class="col-md-3">
+                <input on-change="date_before_change" type="date" value={{ date_after }}>
             </div>
+            <div class="col-md-3">
+                <input type="date" value={{ date_before }}>
+            </div>
+      
         </div>
+
     </div>
     </nav>
     
@@ -133,11 +138,18 @@
 <script src='js/ractive.min.js'></script>
 
 <script>
-    
-    function getIcu() {
-        $.ajax({
-            url: "/api",
-            data_Type: "json",
+
+
+   function getIcu() {
+   
+    $( document ).ready(function() {
+
+            var url = ractive.get("date_after") + "/" + ractive.get("date_before");
+            console.log(url);
+
+           $.ajax({
+            url: "/api/", 
+            data_Type: "JSON",
             cache: false,
             success: function(data) {
                 console.log(JSON.parse(data));
@@ -148,18 +160,28 @@
             error: function(xhr, status, err) {
                 console.log(err) ;
             }.bind(this)
-        })
-    };    
+         });
+        }); 
+    };   
 
 
     function getEditIcu(code) {
         $.ajax({
             url: "/api/" + code,
-            data_Type: "json",
+            data_Type: "JSON",
             cache: false,
             success: function(data) {
-                console.log(JSON.parse(data));
-                ractive.set("newIcu", JSON.parse(data));
+                  rData = JSON.parse(data);
+                  console.log(rData.data.length);
+            
+
+                if(rData.data.length != 0) {
+                    editIcu =  rData;
+                    ractive.set("editIcu", editIcu.data[0]);
+                    ractive.set("cdisabled", "disabled");
+                    ractive.set("newIcu", false);
+                    ractive.set("color", "");
+                }
             }.bind(this),
             
             error: function(xhr, status, err) {
@@ -169,13 +191,29 @@
     };    
 
 
-    function postIcu(newIcu) {
+    function postIcu() {
+
+        var editIcu = ractive.get("editIcu");
+        console.log(editIcu);
+        var saveIcu =  { 
+                                    "code": editIcu.code,
+                                    "name": editIcu.name,
+                                    "province": editIcu.province,
+                                    "hospital": editIcu.hospital,
+                                    "icu_type": editIcu.icu_type,
+                                    "insurance": editIcu.insurance,
+                                    "success": editIcu.success,
+                                    "user": editIcu.user
+                        };
+        console.log(saveIcu);
+
         $.ajax ({
             type: "POST",
             url: "/api",
-            data : newIcu,
+            data : saveIcu,
             data_Type: "json",
             cache: false,
+            //contentType: "application/json; charset=utf-8",
             success: function(data) {
                 console.log(JSON.parse(data));
                 getIcu();
@@ -189,7 +227,7 @@
 
 
     var ractive = new Ractive({
-       el: "#container",
+        el: "#container",
         template: "#template",
         data: { 
 
@@ -219,29 +257,21 @@
                             "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
                             "G. Adana", "Algomed", "Acıbadem", "Metro"],
         
-            disabled: "disabled",
-
-            selectedIcu: {},
-            newIcu: {},
-            editIcu: {}
+            newIcu: false,
+            editIcu: {},
+            date_before: new Date().toJSON().substring(0,10),
+            date_after: new Date().toJSON().substring(0,10)
         } 
 
-        /*{
-            icu: $.get("http://127.0.0.1:8000", function( icu ) {
-                console.log(icu);
-                return icu;
-                          })
-        }*/
-
-        });
+    });
  
-ractive.observe("newIcuProvince", function(newValue, oldValue) {
+ractive.observe("editIcu.province", function(newValue, oldValue) {
     if( newValue != 1) {
-        ractive.set("newIcuHospital", 0);
-        ractive.set("disabled", "disabled");
+        ractive.set("editIcu.hospital", 0);   
+        ractive.set("hdisabled", "disabled");
     }
     else {
-        ractive.set("disabled", "");
+       ractive.set("hdisabled", "");
     }
   });
 
@@ -250,15 +280,39 @@ ractive.on( "activeIcu", function ( event ) {
     $(event.node).addClass('selected');
     
     getEditIcu(event.context.code);
- 
-    ractive.set("selectedIcu", event.context);
-    ractive.set("newIcu", event.context);
-    console.log(event.context);
+    ractive.set("cdisabled", "disabled");
+    ractive.set("newIcu", false);
+    ractive.set("color", "");
 });
 
 ractive.on("newIcu", function(event) {
-    ractive.set("selectedIcu", {province: 0, hospital: 0, icu_type: 0, insurance: 0, success: 0, user: 0});
+    ractive.set("editIcu", {province: 0, hospital: 0, icu_type: 0, insurance: 0, success: 0, user: 0});
     $(".selected").removeClass("selected");
+    ractive.set("newIcu", true);
+    ractive.set("color", "red");
+    ractive.set("cdisabled", "");
+});
+
+/*ractive.observe("newIcu", function(newValue, oldValue) {
+    console.log(newValue);
+});
+*/
+ractive.on("editIcuCodeChange", function(event) {
+
+    getEditIcu(event.context.editIcu.code);
+/*  ractive.set("cdisabled", "disabled");
+    ractive.set("newIcu", false);
+    ractive.set("color", "");
+*/});
+
+ractive.on("date_before_change", function(event) {
+    console.log(ractive.get("date_before"));
+});
+
+ractive.on("saveIcu", function(event) {
+    if(ractive.get("newIcu")) {
+        postIcu();
+    }
 });
 
 </script>
