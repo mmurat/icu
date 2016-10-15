@@ -87,10 +87,10 @@
             </div>
             </div>
             <div class="col-md-3">
-                <input on-change="date_before_change" type="date" value={{ date_after }}>
+                <input on-change="date_after_change" type="date" value={{ date_after }}>
             </div>
             <div class="col-md-3">
-                <input type="date" value={{ date_before }}>
+                <input on-change="date_before_change" type="date" value={{ date_before }}>
             </div>
       
         </div>
@@ -143,9 +143,6 @@
    function getIcu() {
    
     $( document ).ready(function() {
-
-            var url = ractive.get("date_after") + "/" + ractive.get("date_before");
-            console.log(url);
 
            $.ajax({
             url: "/api/", 
@@ -305,8 +302,48 @@ ractive.on("editIcuCodeChange", function(event) {
     ractive.set("color", "");
 */});
 
+ractive.on("date_after_change", function(event) {
+    var date_after = ractive.get("date_after").split("-"); 
+    var date_before = ractive.get("date_before").split("-"); 
+    url = "/api/" + date_after[0] + "/" + date_after[1] + "/" + date_after[2] + "/" + date_before[0] + "/" + date_before[1] + "/" + date_before[2];
+    console.log(url);
+
+        $.ajax({
+            url: url, 
+            data_Type: "JSON",
+            cache: false,
+            success: function(data) {
+                console.log(JSON.parse(data));
+                ractive.set("icu", JSON.parse(data));
+
+            }.bind(this),
+            
+            error: function(xhr, status, err) {
+                console.log(err) ;
+            }.bind(this)
+         });
+});
+
 ractive.on("date_before_change", function(event) {
-    console.log(ractive.get("date_before"));
+    var date_after = ractive.get("date_after").split("-"); 
+    var date_before = ractive.get("date_before").split("-"); 
+    url = "/api/" + date_after[0] + "/" + date_after[1] + "/" + date_after[2] + "/" + date_before[0] + "/" + date_before[1] + "/" + date_before[2];
+    console.log(url);
+
+        $.ajax({
+            url: url, 
+            data_Type: "JSON",
+            cache: false,
+            success: function(data) {
+                console.log(JSON.parse(data));
+                ractive.set("icu", JSON.parse(data));
+
+            }.bind(this),
+            
+            error: function(xhr, status, err) {
+                console.log(err) ;
+            }.bind(this)
+         });
 });
 
 ractive.on("saveIcu", function(event) {
