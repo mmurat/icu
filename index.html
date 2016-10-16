@@ -83,7 +83,7 @@
                 <a on-click="newIcu" class="btn btn-link" style="color: {{ color }};">Yeni</a>
                 <a on-click="saveIcu" href="#" class="btn btn-link">Kaydet</a>
                 <a href="#" class="btn btn-link">Vazgeç</a>
-                <a href="#" class="btn btn-link">Sil</a>
+                <a href="#" on-click="deleteIcu" class="btn btn-link">Sil</a>
             </div>
             </div>
             <div class="col-md-3">
@@ -140,12 +140,37 @@
 <script>
 
 
+    function set_date_before() {
+        var date_before = new Date();
+        date_before.setDate(date_before.getDate() + 1);
+        return date_before.toJSON().substring(0,10);
+    };
+
+    function set_date_after() {
+        var date_after = new Date();
+        date_after.setDate(date_after.getDate() - 1);
+        return date_after.toJSON().substring(0,10);          
+    };
+
+
    function getIcu() {
    
     $( document ).ready(function() {
 
-           $.ajax({
-            url: "/api/", 
+        var date_before = new Date();
+        date_before.setDate(date_before.getDate() + 1);
+
+        var date_after = new Date();
+        date_after.setDate(date_after.getDate() - 1);
+
+        var before = date_before.toJSON().substring(0,10).split("-");
+        var after = date_after.toJSON().substring(0,10).split("-");          
+
+        var url = "/api/" + after[0] + "/" + after[1] + "/" + after[2] + "/" + before[0] + "/" + before[1] + "/" + before[2];
+        
+
+    $.ajax({
+            url: url, 
             data_Type: "JSON",
             cache: false,
             success: function(data) {
@@ -193,15 +218,16 @@
         var editIcu = ractive.get("editIcu");
         console.log(editIcu);
         var saveIcu =  { 
-                                    "code": editIcu.code,
-                                    "name": editIcu.name,
-                                    "province": editIcu.province,
-                                    "hospital": editIcu.hospital,
-                                    "icu_type": editIcu.icu_type,
-                                    "insurance": editIcu.insurance,
-                                    "success": editIcu.success,
-                                    "user": editIcu.user
+                            "code": editIcu.code,
+                            "name": editIcu.name,
+                            "province": editIcu.province,
+                            "hospital": editIcu.hospital,
+                            "icu_type": editIcu.icu_type,
+                            "insurance": editIcu.insurance,
+                            "success": editIcu.success,
+                            "user": editIcu.user
                         };
+
         console.log(saveIcu);
 
         $.ajax ({
@@ -216,6 +242,39 @@
                 getIcu();
             }.bind(this),
             
+            error: function(xhr, status, err) {
+                console.log(err) ;
+            }.bind(this)
+        });
+    };
+
+
+    function putIcu() {
+
+        var editIcu = ractive.get("editIcu");
+        console.log(editIcu);
+        var saveIcu =  { 
+                                    "code": editIcu.code,
+                                    "name": editIcu.name,
+                                    "province": editIcu.province,
+                                    "hospital": editIcu.hospital,
+                                    "icu_type": editIcu.icu_type,
+                                    "insurance": editIcu.insurance,
+                                    "success": editIcu.success,
+                                    "user": editIcu.user
+                        };
+        console.log(saveIcu);
+
+        $.ajax ({
+            type: "PUT",
+            url: "/api",
+            data : saveIcu,
+            data_Type: "json",
+            cache: false,
+            success: function(data) {
+                console.log(JSON.parse(data));
+                getIcu();
+            }.bind(this),
             error: function(xhr, status, err) {
                 console.log(err) ;
             }.bind(this)
@@ -256,8 +315,8 @@
         
             newIcu: false,
             editIcu: {},
-            date_before: new Date().toJSON().substring(0,10),
-            date_after: new Date().toJSON().substring(0,10)
+            date_before: set_date_before(), 
+            date_after: set_date_after()
         } 
 
     });
@@ -290,10 +349,7 @@ ractive.on("newIcu", function(event) {
     ractive.set("cdisabled", "");
 });
 
-/*ractive.observe("newIcu", function(newValue, oldValue) {
-    console.log(newValue);
-});
-*/
+
 ractive.on("editIcuCodeChange", function(event) {
 
     getEditIcu(event.context.editIcu.code);
@@ -349,6 +405,34 @@ ractive.on("date_before_change", function(event) {
 ractive.on("saveIcu", function(event) {
     if(ractive.get("newIcu")) {
         postIcu();
+        ractive.set("newIcu", false);
+        ractive.set("color", "");
+        ractive.set("cdisabled", "disabled");
+    } else {
+        putIcu();
+    }
+});
+
+ractive.on("deleteIcu", function(event) {
+    var confirm = window.confirm("Kayıt Silinicek?");
+    code = ractive.get("editIcu").code;
+    console.log(code);
+    
+    if(confirm) {
+        $.ajax({
+            type: "DELETE", 
+            url: "/api/" + code,
+            data_Type: "JSON",
+            cache: false,
+            success: function(data) { 
+                  console.log(data);
+                  getIcu();
+                }.bind(this),
+            
+            error: function(xhr, status, err) {
+                console.log(err) ;
+            }.bind(this)
+    });
     }
 });
 

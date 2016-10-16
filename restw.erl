@@ -57,7 +57,6 @@ out(Arg) ->
   io:format("~p: ~p ~p Request ~n", [?MODULE, ?LINE, Method]),
   handle(Method, Arg).
 
-
 handle('GET', Arg) ->
 
     Uri = yaws_api:request_url(Arg),
@@ -85,60 +84,51 @@ handle('POST', Arg) ->
   Json = rfc4627:encode(JsonData),
 
   {html, Json};
-  %%getIcu('GET', Arg, ["api"]); 
-    
-    % [{status, 201},
-    %   {html, {obj, rfc4627:encode([{data, Icu}])}},
-    %   {header, {content_type, erase}},
-    %   {header, {content_type, "text/html; charset=UTF-8"}}
-    %   ];
 
   handle('PUT', Arg) ->
-    [IndexValue, _]     = string:tokens(Arg#arg.pathinfo, "/"),
-    {ok, Json, _}       = rfc4627:decode(Arg#arg.clidata),
-    io:format("~p:~p PUT request ~p ~p~n",
-      [?MODULE, ?LINE, IndexValue, Json]),
-
-      Code        = rfc4627:get_field(Json, "code", <<>>),
-      Name        = rfc4627:get_field(Json, "name", <<>>),
-      Province    = rfc4627:get_field(Json, "province", <<>>),
-      Hospital    = rfc4627:get_field(Json, "hospital", <<>>),
-      Insurance   = rfc4627:get_field(Json, "insurance", <<>>),
-      IcuType     = rfc4627:get_field(Json, "icu_type", <<>>),
-      Success     = rfc4627:get_field(Json, "success", <<>>),
-      User        = rfc4627:get_field(Json, "user", <<>>),
-  %%    Date        = rfc4627:get_field(Json, "date", <<>>),
-
+    
+    io:format("~p:~p PUT request ~p ~n",
+      [?MODULE, ?LINE, yaws_api:parse_post(Arg)]), 
+    Icu = yaws_api:parse_post(Arg),
+    [ {"code", Code}, {"name", Name}, {"province", Province}, {"hospital", Hospital}, 
+      {"icu_type", IcuType}, {"insurance", Insurance},  {"success", Success}, {"user", User}] = Icu,
+    
   NewRec =
-    #icu{ code = Code,
-      name = Name,
-      province = Province,
-      hospital = Hospital,
-      insurance = Insurance,
-      icu_type = IcuType,
-      success = Success,
-      user = User
-      %%date = erlang:localtime() %%
+    #icu{ code = list_to_integer(Code),
+      name = list_to_bitstring(Name),
+      province = list_to_integer(Province),
+      hospital = list_to_integer(Hospital),
+      insurance = list_to_integer(Insurance),
+      icu_type = list_to_integer(IcuType),
+      success = list_to_integer(Success),
+      user = list_to_integer(User),
+      date = erlang:localtime()
     },
 
     io:format("~p:~p Renaming ~p",
       [?MODULE, ?LINE, NewRec]),
 
-    ChangeName         = fun() ->
-                            mnesia:delete({icu, IndexValue}),
+    ChangeIcu         = fun() ->
+                            mnesia:delete({icu, Code}),
                             mnesia:write(NewRec)
                           end,
-    {atomic, _Rec}      = mnesia:transaction(ChangeName),
+    {atomic, _Rec}      = mnesia:transaction(ChangeIcu),
     [{status, 200},
-      {html, IndexValue}];
+      {html, Code}];
 
   handle('DELETE', Arg) ->
-    [IndexValue, _]     = string:tokens(Arg#arg.pathinfo,"/"),
+    
+    Uri = yaws_api:request_url(Arg),
+    Path = string:tokens(Uri#url.path, "/"), 
+
+    ["api", Code]     = Path,
+
+
     io:format("~p:~p DELETE request ~p",
-      [?MODULE, ?LINE, IndexValue]),
+      [?MODULE, ?LINE, Code]),
 
     Delete              = fun() ->
-      mnesia:delete({icu, IndexValue})
+      mnesia:delete({icu, list_to_integer(Code)})
                           end,
 
     Resp                = mnesia:transaction(Delete),
@@ -158,15 +148,8 @@ handle('POST', Arg) ->
       {status, 405},
       {header, "Allow: GET, HEAD, POST, PUT, DELETE"}].
 
-  do(Q) ->
-    F = fun() ->
-      qlc:e(Q)
-        end,
-    {atomic, Value}   = mnesia:transaction(F),
-    Value.
 
-
-    getIcu('GET', Arg, ["api"]) ->
+  getIcu('GET', Arg, ["api"]) ->
    
       io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
     
@@ -205,8 +188,7 @@ handle('POST', Arg) ->
         {html, Json}
       ];
 
-
-    getIcu('GET', Arg, ["api", Code]) ->
+  getIcu('GET', Arg, ["api", Code]) ->
    
       io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
     
@@ -224,5 +206,5 @@ handle('POST', Arg) ->
         {html, Json}
       ].
 
-days({{Year, Month, Day}, _}) ->
+  days({{Year, Month, Day}, _}) ->
     calendar:date_to_gregorian_days(Year, Month, Day ).
