@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="tr">
 <head>
+    <title>Adana 112 Koordinasyon</title>
     <meta http-equiv="content-type" content="text/html; charset=utf8" />
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -80,10 +81,10 @@
         <div class="row">
             <div class="col-md-6">
             <div class="btn-group btn-group-justified">
-                <a on-click="newIcu" class="btn btn-link" style="color: {{ color }};">Yeni</a>
-                <a on-click="saveIcu" href="#" class="btn btn-link">Kaydet</a>
-                <a href="#" class="btn btn-link">Vazgeç</a>
-                <a href="#" on-click="deleteIcu" class="btn btn-link">Sil</a>
+                <a on-click="newIcu" class="btn btn-link" style="color: {{ color }};"><b>Yeni</b></a>
+                <a on-click="saveIcu" href="#" class="btn btn-link"><b>Kaydet</b></a>
+                <a href="#" class="btn btn-link"><b>Vazgeç</b></a>
+                <a href="#" on-click="deleteIcu" class="btn btn-link"><b>Sil</b></a>
             </div>
             </div>
             <div class="col-md-3">
@@ -132,6 +133,16 @@
     </div>
     </div>
     </div>
+
+    <br />
+
+    <div id="footer">
+      <div class="container">
+        <p class="copyright">&copy; 2016 Adana 112</p>
+      </div>
+    </div>
+
+
     </script>
 
 <script src='js/jquery-1.12.3.js'></script>
@@ -186,7 +197,6 @@
         }); 
     };   
 
-
     function getEditIcu(code) {
         $.ajax({
             url: "/api/" + code,
@@ -195,8 +205,7 @@
             success: function(data) {
                   rData = JSON.parse(data);
                   console.log(rData.data.length);
-            
-
+ 
                 if(rData.data.length != 0) {
                     editIcu =  rData;
                     ractive.set("editIcu", editIcu.data[0]);
@@ -289,7 +298,8 @@
 
             icu: getIcu(),
             insuranceName: [ "Bilinmiyor", "SGK", "SSK", "Emekli Sandığı", "Bağkur", "Yeşilkart", "18 yaş altı", "Güvencesiz", "Suriyeli" ],
-            userName: [ "Yok" , "Murat Arıca" ],
+            userName: [ "Yok" , "Murat Arıca", "Ayla Aslantaş", "Fulya Sağmak", 
+                        "Özlem Çelik", "Birsen Günbaz", "Elvan Aydın Gök", "Güray Özalp", "Yeter Ağdak", "Zühal Kocatepe" ],
             icu_typeName: [ "Bilinmiyor/Yok", "Yenidoğan", "Çocuk", "Dahiliye", "Reanimasyon", "Nöroloji", "Beyin Cerrahi", "Koroner", "KVC", "Yanık", "Mikrocerrahi"],
             hospitalName: [ "Bilinmiyor", "ADH", "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
                             "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana", "G. Adana", "Algomed", "Acıbadem", "Metro" ],
@@ -312,7 +322,6 @@
                             "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
                             "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
                             "G. Adana", "Algomed", "Acıbadem", "Metro"],
-        
             newIcu: false,
             editIcu: {},
             date_before: set_date_before(), 
@@ -414,8 +423,10 @@ ractive.on("saveIcu", function(event) {
 });
 
 ractive.on("deleteIcu", function(event) {
+
     var confirm = window.confirm("Kayıt Silinicek?");
     code = ractive.get("editIcu").code;
+    if(parseInt(code)) {
     console.log(code);
     
     if(confirm) {
@@ -434,6 +445,7 @@ ractive.on("deleteIcu", function(event) {
             }.bind(this)
     });
     }
+}
 });
 
 </script>
