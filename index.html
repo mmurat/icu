@@ -248,7 +248,7 @@
             //contentType: "application/json; charset=utf-8",
             success: function(data) {
                 console.log(JSON.parse(data));
-                getIcu();
+                getIcuWithDate();
             }.bind(this),
             
             error: function(xhr, status, err) {
@@ -282,7 +282,7 @@
             cache: false,
             success: function(data) {
                 console.log(JSON.parse(data));
-                getIcu();
+                getIcuWithDate();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.log(err) ;
@@ -321,7 +321,7 @@
             successName: [ "Yerleştirilemedi", "İptal", "Servis Hastası", "ADH", 
                             "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
                             "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
-                            "G. Adana", "Algomed", "Acıbadem", "Metro"],
+                            "G. Adana", "Algomed", "Acıbadem", "Metro", "EPC"],
             newIcu: false,
             editIcu: {},
             date_before: set_date_before(), 
@@ -368,28 +368,11 @@ ractive.on("editIcuCodeChange", function(event) {
 */});
 
 ractive.on("date_after_change", function(event) {
-    var date_after = ractive.get("date_after").split("-"); 
-    var date_before = ractive.get("date_before").split("-"); 
-    url = "/api/" + date_after[0] + "/" + date_after[1] + "/" + date_after[2] + "/" + date_before[0] + "/" + date_before[1] + "/" + date_before[2];
-    console.log(url);
-
-        $.ajax({
-            url: url, 
-            data_Type: "JSON",
-            cache: false,
-            success: function(data) {
-                console.log(JSON.parse(data));
-                ractive.set("icu", JSON.parse(data));
-
-            }.bind(this),
-            
-            error: function(xhr, status, err) {
-                console.log(err) ;
-            }.bind(this)
-         });
+    getIcuWithDate();
 });
 
-ractive.on("date_before_change", function(event) {
+
+function getIcuWithDate() {
     var date_after = ractive.get("date_after").split("-"); 
     var date_before = ractive.get("date_before").split("-"); 
     url = "/api/" + date_after[0] + "/" + date_after[1] + "/" + date_after[2] + "/" + date_before[0] + "/" + date_before[1] + "/" + date_before[2];
@@ -409,6 +392,10 @@ ractive.on("date_before_change", function(event) {
                 console.log(err) ;
             }.bind(this)
          });
+};
+
+ractive.on("date_before_change", function(event) {
+    getIcuWithDate();
 });
 
 ractive.on("saveIcu", function(event) {
@@ -446,6 +433,12 @@ ractive.on("deleteIcu", function(event) {
     });
     }
 }
+});
+
+ractive.on( 'sort', function ( event, column ) {
+  console.log(column);
+  this.set( 'sortColumn', column );
+
 });
 
 </script>

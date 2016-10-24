@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <title>Adana 112 Koordinasyon</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf8" />
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <div id="container"></div>
+    <script id="template" type="text/ractive">
+    <div class="well">
+        <div class="container">
+            <div class="row">
+                 <div class="col-md-3">
+                    <select>
+                        <option value="event">Vaka Sayıları - Günlük / Aylık</option>
+                        <option value="icu_type">Yoğunbakım Vaka Sayıları</option>
+                        <option value="source">İl İstek Vaka Sayıları</option>
+                        <option value="hospital">Hastane İstek Vaka Sayıları</option>
+                        <option value="success">Hastane Kabul Vaka Sayıları</option>
+                        <option value="user">Kullanıcı Hastane Kabul Vaka Sayıları</option>
+                    </select>
+                </div> 
+                <div class="col-md-3">
+                    <input on-change="date_change" type="month" value={{ date }}>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+<div class="container">
+<div class="row">
+<div class="col-md-4">
+<svg class="chart" width="{{ width }}" height="{{ size * 20 }}">
+
+  {{#each report:i }}
+
+    <g transform="translate(0, {{ i * 20 }})">
+      <rect class="success" width={{ success * 2 }} height="19"></rect>
+      <text x={{ success * 2 - 5 }} y="9.5" dy=".35em">%{{ Math.round(100 * success / value) }}</text> 
+    </g>
+
+    <g transform="translate({{ success * 2 }}, {{ i * 20 }})">
+          <rect class="total" width={{ ( value  * 2 ) - ( success * 2 ) }} height="19"></rect>
+          <text x="{{ ((value * 2) - ( success * 2 )) - 10 }}" y="9.5" dy=".35em">{{ label + " / " + value + " talep" }}
+    </g>
+
+   {{ /each }}
+  
+  </svg>
+</div>
+</div>
+</div>
+
+    <br />
+    <div id="footer">
+      <div class="container">
+        <p class="copyright">&copy; 2016 Adana 112</p>
+      </div>
+    </div>
+
+    </script>
+
+<script src='../js/jquery-1.12.3.js'></script>
+<script src='../js/ractive.min.js'></script>
+
+<script>
+
+    var data = [  { label: "23.10.2016", value: 134, success: 21 },
+                  { label: "24.10.2016", value: 201, success: 14 },
+                  { label: "25.10.2016", value: 178, success: 21 },
+                  { label: "26.10.2016", value: 134, success: 21 },
+                  { label: "27.10.2016", value: 201, success: 14 },
+                  { label: "28.10.2016", value: 178, success: 21 },
+                  { label: "29.10.2016", value: 134, success: 21 },
+                  { label: "30.10.2016", value: 201, success: 14 },
+                  { label: "31.10.2016", value: 178, success: 21 },
+                  { label: "01.11.2016", value: 134, success: 21 },
+                  { label: "02.11.2016", value: 201, success: 14 },
+                  { label: "03.11.2016", value: 399, success: 40 }
+    ];
+
+    console.log(data.length);
+
+    var ractive = new Ractive({
+        el: "#container",
+        template: "#template",
+        data: {
+
+            date: new Date().toJSON().substring(0, 7),
+            width: 1000,
+            height: 240,
+            report: data,
+            size: data.length
+        }
+    });
+
+</script>
+</body>
+</html>

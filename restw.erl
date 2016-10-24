@@ -60,7 +60,7 @@ out(Arg) ->
 handle('GET', Arg) ->
 
     Uri = yaws_api:request_url(Arg),
-    Path = string:tokens(Uri#url.path, "/"), 
+    Path = string:tokens(Uri#url.path, "/"),
     io:format("~p", [Path]),
 
     getIcu('GET', Arg, Path);
@@ -73,10 +73,10 @@ handle('POST', Arg) ->
     Icu = yaws_api:parse_post(Arg),
     io:format("~n~p:~p POST request ~p~n", [?MODULE, ?LINE, Icu]),
 
-  [ {"code", Code}, {"name", Name}, {"province", Province}, {"hospital", Hospital}, 
+  [ {"code", Code}, {"name", Name}, {"province", Province}, {"hospital", Hospital},
    {"icu_type", IcuType}, {"insurance", Insurance},  {"success", Success}, {"user", User}] = Icu,
 
-    _Status     = addIcu(list_to_integer(Code), list_to_bitstring(Name), list_to_integer(Province), 
+    _Status     = addIcu(list_to_integer(Code), list_to_bitstring(Name), list_to_integer(Province),
                           list_to_integer(Hospital), list_to_integer(Insurance), list_to_integer(IcuType),
                               list_to_integer(Success), list_to_integer(User) ),
 
@@ -86,13 +86,18 @@ handle('POST', Arg) ->
   {html, Json};
 
   handle('PUT', Arg) ->
-    
+
     io:format("~p:~p PUT request ~p ~n",
-      [?MODULE, ?LINE, yaws_api:parse_post(Arg)]), 
+      [?MODULE, ?LINE, yaws_api:parse_post(Arg)]),
     Icu = yaws_api:parse_post(Arg),
-    [ {"code", Code}, {"name", Name}, {"province", Province}, {"hospital", Hospital}, 
+    [ {"code", Code}, {"name", Name}, {"province", Province}, {"hospital", Hospital},
       {"icu_type", IcuType}, {"insurance", Insurance},  {"success", Success}, {"user", User}] = Icu,
-    
+
+    Fun = fun() ->
+        mnesia:read({icu, list_to_integer(Code)})
+      end,
+    { atomic, [Record | _] } = mnesia:transaction(Fun),
+
   NewRec =
     #icu{ code = list_to_integer(Code),
       name = list_to_bitstring(Name),
@@ -102,7 +107,7 @@ handle('POST', Arg) ->
       icu_type = list_to_integer(IcuType),
       success = list_to_integer(Success),
       user = list_to_integer(User),
-      date = erlang:localtime()
+      date = Record#icu.date
     },
 
     io:format("~p:~p Renaming ~p",
@@ -117,9 +122,9 @@ handle('POST', Arg) ->
       {html, Code}];
 
   handle('DELETE', Arg) ->
-    
+
     Uri = yaws_api:request_url(Arg),
-    Path = string:tokens(Uri#url.path, "/"), 
+    Path = string:tokens(Uri#url.path, "/"),
 
     ["api", Code]     = Path,
 
@@ -150,9 +155,9 @@ handle('POST', Arg) ->
 
 
   getIcu('GET', Arg, ["api"]) ->
-   
+
       io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
-    
+
       Fun = fun() ->
         Q = qlc:q([X || X <- mnesia:table(icu)]),
         qlc:e(Q)
@@ -167,9 +172,9 @@ handle('POST', Arg) ->
         {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
         {html, Json}
       ];
-      
+
   getIcu('GET', Arg, ["api", YearA, MonthA, DayA, YearB, MonthB, DayB]) ->
-    
+
     DaysA = calendar:date_to_gregorian_days(list_to_integer(YearA), list_to_integer(MonthA), list_to_integer(DayA) ),
     DaysB = calendar:date_to_gregorian_days(list_to_integer(YearB), list_to_integer(MonthB), list_to_integer(DayB) ),
 
@@ -189,9 +194,9 @@ handle('POST', Arg) ->
       ];
 
   getIcu('GET', Arg, ["api", Code]) ->
-   
+
       io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
-    
+
       Fun = fun() ->
         mnesia:read({icu, list_to_integer(Code)})
       end,
@@ -208,3 +213,31 @@ handle('POST', Arg) ->
 
   days({{Year, Month, Day}, _}) ->
     calendar:date_to_gregorian_days(Year, Month, Day ).
+
+    month_report(Year, Month) ->
+  		[ {{Year, Month, Day}, day_report(Year, Month, Day)} || Day <- lists:seq(1,31), calendar:valid_date(Year, Month, Day) ].
+
+  	day_report(Year, Month, Day) ->
+  		F = fun() ->
+  			Q = qlc:q([
+  									{
+  										{ province, I#icu.province },
+  										{ hospital, I#icu.hospital },
+  										{ insurance, I#icu.insurance },
+  										{ icu_type, I#icu.icu_type },
+  										{ success, I#icu.success },
+  										{ user, I#icu.user }
+  									}
+  									||
+  										I <- mnesia:table(icu),
+  										 day(I#icu.date, {Year, Month, Day})
+  								]),
+  			qlc:e(Q)
+    	end,
+  	  {atomic, List} = mnesia:transaction(F),
+  		List.
+
+  day( { {Year, Month, Day}, _}, {Year, Month, Day} ) ->
+  	true;
+  day(_, _) ->
+  	false.
