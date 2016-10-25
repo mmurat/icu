@@ -6,7 +6,7 @@
 -include_lib("stdlib/include/qlc.hrl").
 -include("icu.hrl").
 
--export([out/1]).
+-export([out/1, month_report/2]).
 
 formatDate( {_Date={Year,Month,Day},_Time={Hour,Minutes, _Seconds}}) ->
     list_to_bitstring(integer_to_list(Day) ++ "/" ++ integer_to_list(Month) ++ "/" ++
@@ -63,7 +63,7 @@ handle('GET', Arg) ->
     Path = string:tokens(Uri#url.path, "/"),
     io:format("~p", [Path]),
 
-    getIcu('GET', Arg, Path);
+handle('GET', Arg, Path);
 
 %    {html, Json};
 
@@ -154,26 +154,42 @@ handle('POST', Arg) ->
       {header, "Allow: GET, HEAD, POST, PUT, DELETE"}].
 
 
-  getIcu('GET', Arg, ["api"]) ->
+      handle('GET', _Arg, ["api", Year, Month]) ->
 
-      io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
+        io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
+        Report = month_report(list_to_integer(Year), list_to_integer(Month)),
 
-      Fun = fun() ->
-        Q = qlc:q([X || X <- mnesia:table(icu)]),
-        qlc:e(Q)
-      end,
-      { atomic, Records } = mnesia:transaction(Fun),
+        Json = convert_to_json(Report),
 
-      Json = convert_to_json(lists:reverse(Records)),
-      io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
+        io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
 
-      [{status, 200},
-        {header, {content_type, "text/html; charset=UTF-8"}},
-        {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
-        {html, Json}
-      ];
+        [{status, 200},
+          {header, {content_type, "text/html; charset=UTF-8"}},
+          {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
+          {html, Json}
+        ];
 
-  getIcu('GET', Arg, ["api", YearA, MonthA, DayA, YearB, MonthB, DayB]) ->
+
+  % handle('GET', _Arg, ["api"]) ->
+  %
+  %     io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
+  %
+  %     Fun = fun() ->
+  %       Q = qlc:q([X || X <- mnesia:table(icu)]),
+  %       qlc:e(Q)
+  %     end,
+  %     { atomic, Records } = mnesia:transaction(Fun),
+  %
+  %     Json = convert_to_json(lists:reverse(Records)),
+  %     io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
+  %
+  %     [{status, 200},
+  %       {header, {content_type, "text/html; charset=UTF-8"}},
+  %       {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
+  %       {html, Json}
+  %     ];
+
+  handle('GET', _Arg, ["api", YearA, MonthA, DayA, YearB, MonthB, DayB]) ->
 
     DaysA = calendar:date_to_gregorian_days(list_to_integer(YearA), list_to_integer(MonthA), list_to_integer(DayA) ),
     DaysB = calendar:date_to_gregorian_days(list_to_integer(YearB), list_to_integer(MonthB), list_to_integer(DayB) ),
@@ -193,7 +209,7 @@ handle('POST', Arg) ->
         {html, Json}
       ];
 
-  getIcu('GET', Arg, ["api", Code]) ->
+  handle('GET', _Arg, ["api", Code]) ->
 
       io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
 
@@ -211,33 +227,19 @@ handle('POST', Arg) ->
         {html, Json}
       ].
 
+
   days({{Year, Month, Day}, _}) ->
     calendar:date_to_gregorian_days(Year, Month, Day ).
 
-    month_report(Year, Month) ->
-  		[ {{Year, Month, Day}, day_report(Year, Month, Day)} || Day <- lists:seq(1,31), calendar:valid_date(Year, Month, Day) ].
+  month_report(Year, Month) ->
+      Fun = fun() ->
+        Q = qlc:q([ I || I <- mnesia:table(icu), month( {Year, Month}, I#icu.date) ]),
+        qlc:e(Q)
+      end,
+      { atomic, List } = mnesia:transaction(Fun),
+      List.
 
-  	day_report(Year, Month, Day) ->
-  		F = fun() ->
-  			Q = qlc:q([
-  									{
-  										{ province, I#icu.province },
-  										{ hospital, I#icu.hospital },
-  										{ insurance, I#icu.insurance },
-  										{ icu_type, I#icu.icu_type },
-  										{ success, I#icu.success },
-  										{ user, I#icu.user }
-  									}
-  									||
-  										I <- mnesia:table(icu),
-  										 day(I#icu.date, {Year, Month, Day})
-  								]),
-  			qlc:e(Q)
-    	end,
-  	  {atomic, List} = mnesia:transaction(F),
-  		List.
-
-  day( { {Year, Month, Day}, _}, {Year, Month, Day} ) ->
+  month( { Year, Month } , { {Year, Month, _}, _} ) ->
   	true;
-  day(_, _) ->
+  month(_, _) ->
   	false.

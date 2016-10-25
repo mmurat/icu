@@ -12,7 +12,7 @@
     stroke: rgb(50,50,50);
 }
 
-text.area 
+text.area
 {
     font-family: 'Voltaire';
     fill: white;
@@ -35,9 +35,9 @@ input, select {
     border-spacing: 0;
     box-sizing: border-box;
     font-size: 0.85em;
-} 
+}
 
-.icuTable, .icuEdit
+.icuTable, .icuEdit, .reportTable
 {
      *border: 1px solid rgb(210,210,210);
      border: 1px solid rgba(0,0,0,0.3);
@@ -47,9 +47,13 @@ input, select {
  }
 
 
-.icuTable td, .icuTable th, .icuEdit th, .icuEdit td  {
+.icuTable td, .icuTable th, .icuEdit th, .icuEdit td  .reportTable td, .reportTable th {
     padding: 0.5em !important;
     text-align: left;
+}
+
+.reportTable td, .reportTable th {
+  text-align: right;
 }
 
 th {
@@ -75,7 +79,7 @@ tr:last-child td {
 }
 
 .icuTable tr:hover {
-    background: #FF0000; 
+    background: #FF0000;
 }
 
 th.sortable {
@@ -86,7 +90,7 @@ th.sortable {
     background: rgba(0,0,0,0.7)  no-repeat 4px background-size: 0.8em 0.8em;
 }
 
-th.sorted 
+th.sorted
     {
       /*  background-image: url(../../icons/sort-arrow-sorted.svg); */
     }
@@ -94,4 +98,12 @@ th.sorted
 .icuTable tr.selected {
     background-color: #333;
     color: #fff;
+}
+
+.reportTable td {
+  text-align: right;
+}
+
+.reportTable th {
+  text-align: left;
 }

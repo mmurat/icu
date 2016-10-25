@@ -8,6 +8,7 @@
 </head>
 <body>
     <div id="container"></div>
+
     <script id="template" type="text/ractive">
     <div class="well">
         <div class="container">
@@ -21,9 +22,9 @@
                         <option value="success">Hastane Kabul Vaka Sayıları</option>
                         <option value="user">Kullanıcı Hastane Kabul Vaka Sayıları</option>
                     </select>
-                </div> 
+                </div>
                 <div class="col-md-3">
-                    <input on-change="date_change" type="month" value={{ date }}>
+                    <input on-change="date_change" type="month" value={{ report_date }}>
                 </div>
             </div>
         </div>
@@ -33,26 +34,73 @@
 
 <div class="container">
 <div class="row">
-<div class="col-md-4">
-<svg class="chart" width="{{ width }}" height="{{ size * 20 }}">
+<div class="col-md-12">
 
-  {{#each report:i }}
+ <h3> {{ report_date }} Günlük Başvuru </h3>
+ <br />
 
-    <g transform="translate(0, {{ i * 20 }})">
-      <rect class="success" width={{ success * 2 }} height="19"></rect>
-      <text x={{ success * 2 - 5 }} y="9.5" dy=".35em">%{{ Math.round(100 * success / value) }}</text> 
-    </g>
+<table class="icuTable">
+    <tr>
+        <th>Tarih</th>
+        <th>Başvuru</th>
+        <th>Yerleşen</th>
+        <th>Adana Başvuru</th>
+        <th>Adana Yerleşen</th>
+        <th>İl Dışı Başvuru</th>
+        <th>İl Dışı Yerleşen</th>
+    </tr>
 
-    <g transform="translate({{ success * 2 }}, {{ i * 20 }})">
-          <rect class="total" width={{ ( value  * 2 ) - ( success * 2 ) }} height="19"></rect>
-          <text x="{{ ((value * 2) - ( success * 2 )) - 10 }}" y="9.5" dy=".35em">{{ label + " / " + value + " talep" }}
-    </g>
+    {{ #each d_report }}
+        <tr>
+            <td style="text-align: right;">{{ date }}</td>
+            <td style="text-align: right;">{{ value }}</td>
+            <td style="text-align: right;">{{ success }}</td>
+            <td style="text-align: right;">{{ in_ }}</td>
+            <td style="text-align: right;">{{ in_success }}</td>
+            <td style="text-align: right;">{{ out_ }}</td>
+            <td style="text-align: right;">{{ out_success }}</td>
+        </tr>
+    {{ /each }}
 
-   {{ /each }}
-  
-  </svg>
+
+</table>
+
 </div>
 </div>
+
+<br />
+<div class="row">
+<div class="col-md-12">
+
+ <h3> {{ report_date }} Toplam</h3>
+ <br />
+
+<table class="icuTable">
+    <tr>
+        <th>Başvuru</th>
+        <th>Yerleşen</th>
+        <th>Adana Başvuru</th>
+        <th>Adana Yerleşen</th>
+        <th>İl Dışı Başvuru</th>
+        <th>İl Dışı Yerleşen</th>
+    </tr>
+
+    {{ #with m_report }}
+        <tr>
+            <td style="text-align: right;">{{ value }}</td>
+            <td style="text-align: right;">{{ success }}</td>
+            <td style="text-align: right;">{{ in_ }}</td>
+            <td style="text-align: right;">{{ in_success }}</td>
+            <td style="text-align: right;">{{ out_ }}</td>
+            <td style="text-align: right;">{{ out_success }}</td>
+        </tr>
+    {{ /with }}
+
+</table>
+
+</div>
+</div>
+
 </div>
 
     <br />
@@ -64,39 +112,116 @@
 
     </script>
 
-<script src='../js/jquery-1.12.3.js'></script>
-<script src='../js/ractive.min.js'></script>
+<script src="../js/jquery-1.12.3.js"></script>
+<script src="../js/ractive.min.js"></script>
 
 <script>
 
-    var data = [  { label: "23.10.2016", value: 134, success: 21 },
-                  { label: "24.10.2016", value: 201, success: 14 },
-                  { label: "25.10.2016", value: 178, success: 21 },
-                  { label: "26.10.2016", value: 134, success: 21 },
-                  { label: "27.10.2016", value: 201, success: 14 },
-                  { label: "28.10.2016", value: 178, success: 21 },
-                  { label: "29.10.2016", value: 134, success: 21 },
-                  { label: "30.10.2016", value: 201, success: 14 },
-                  { label: "31.10.2016", value: 178, success: 21 },
-                  { label: "01.11.2016", value: 134, success: 21 },
-                  { label: "02.11.2016", value: 201, success: 14 },
-                  { label: "03.11.2016", value: 399, success: 40 }
-    ];
+  var day_report = [
+    { day: 1, value: 0, success: 0, date: "01/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 2, value: 0, success: 0, date: "02/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 3, value: 0, success: 0, date: "03/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 4, value: 0, success: 0, date: "04/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 5, value: 0, success: 0, date: "05/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 6, value: 0, success: 0, date: "06/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 7, value: 0, success: 0, date: "07/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 8, value: 0, success: 0, date: "08/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 9, value: 0, success: 0, date: "09/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 10, value: 0, success: 0, date: "10/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 11, value: 0, success: 0, date: "11/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 12, value: 0, success: 0, date: "12/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 13, value: 0, success: 0, date: "13/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 14, value: 0, success: 0, date: "14/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 15, value: 0, success: 0, date: "15/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 16, value: 0, success: 0, date: "16/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 17, value: 0, success: 0, date: "17/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 18, value: 0, success: 0, date: "18/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 19, value: 0, success: 0, date: "19/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 20, value: 0, success: 0, date: "20/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 21, value: 0, success: 0, date: "21/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 22, value: 0, success: 0, date: "22/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 23, value: 0, success: 0, date: "23/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 24, value: 0, success: 0, date: "24/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 25, value: 0, success: 0, date: "25/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 26, value: 0, success: 0, date: "26/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 27, value: 0, success: 0, date: "27/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 28, value: 0, success: 0, date: "28/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 29, value: 0, success: 0, date: "29/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 30, value: 0, success: 0, date: "30/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { day: 31, value: 0, success: 0, date: "31/", in_: 0, in_success: 0, out_: 0, out_success: 0 }
+  ];
 
-    console.log(data.length);
+  var month_total = {
+    value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0
+  };
+
+    function getMonthIcu() {
+
+        var report_date = new Date().toJSON().substring(0, 7).split("-");
+        var url = "/api/" + report_date[0] + "/" + report_date[1];
+        console.log(url);
+
+            $.ajax({
+                url: url,
+                data_Type: "JSON",
+                cache: false,
+                success: function(data) {
+                icu = JSON.parse(data).data;
+
+                  for(i = 0; i < icu.length ; i++) {
+                    day = parseInt(icu[i].date.substring(0, 2));
+                    day_report[ day - 1 ].value = day_report[day - 1].value + 1;
+
+                    if( (icu[i].success !=  0) &&  (icu[i].success !=  1) && (icu[i].success !=  2) ) {
+                      day_report[ day - 1 ].success = day_report[day - 1].success + 1;
+                      if( icu[i].province == 1) {
+                        day_report[ day - 1 ].in_ = day_report[ day - 1 ].in_ + 1;
+                        day_report[ day - 1 ].in_success = day_report[ day - 1 ].in_success + 1;
+                      } else {
+                        day_report[ day - 1 ].out_ = day_report[ day - 1 ].out_ + 1;
+                        day_report[ day - 1 ].out_success = day_report[ day - 1 ].out_success + 1;
+                      }
+                    } else {
+                      if( icu[i].province == 1) {
+                        day_report[ day - 1 ].in_ = day_report[ day - 1 ].in_ + 1;
+                      } else {
+                        day_report[ day - 1 ].out_ = day_report[ day - 1 ].out_ + 1;
+                      }
+                    }
+                  }
+
+                  for(i = 0; i < day_report.length; i++ ) {
+                    day_report[i].date = day_report[i].date + report_date[1] + "/" + report_date[0];
+                    month_total.value += day_report[i].value;
+                    month_total.success += day_report[i].success;
+                    month_total.in_ += day_report[i].in_;
+                    month_total.in_success += day_report[i].in_success
+                    month_total.out_ += day_report[i].out_;
+                    month_total.out_success += day_report[i].out_success
+                  }
+
+                  ractive.set("d_report", day_report);
+                  ractive.set("m_report", month_total);
+                }.bind(this),
+
+                error: function(xhr, status, err) {
+                    console.log(err) ;
+                }.bind(this)
+             });
+          };
 
     var ractive = new Ractive({
         el: "#container",
         template: "#template",
         data: {
 
-            date: new Date().toJSON().substring(0, 7),
-            width: 1000,
-            height: 240,
-            report: data,
-            size: data.length
+            report_date: new Date().toJSON().substring(0, 7),
+            d_report: {},
+            m_report: {}
         }
     });
+
+    getMonthIcu();
 
 </script>
 </body>
