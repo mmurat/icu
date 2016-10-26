@@ -57,7 +57,7 @@
                     {{/each}}
                 </select>
             </td>
-            
+
             <td>
                 <select value={{ editIcu.success }} >
                     {{ #each successName:i }}
@@ -93,12 +93,12 @@
             <div class="col-md-3">
                 <input on-change="date_before_change" type="date" value={{ date_before }}>
             </div>
-      
+
         </div>
 
     </div>
     </nav>
-    
+
     <div class="container" style="margin-top:10%;">
     <div class="row">
     <div class="col-md-12">
@@ -114,7 +114,7 @@
             <th>Tarih</th>
             <th>Kullanıcı</th>
         </tr>
-        
+
     {{ #each icu.data }}
         <tr on-click="activeIcu">
             <td style="text-align:right;">{{ code }}</td>
@@ -160,12 +160,12 @@
     function set_date_after() {
         var date_after = new Date();
         date_after.setDate(date_after.getDate() - 1);
-        return date_after.toJSON().substring(0,10);          
+        return date_after.toJSON().substring(0,10);
     };
 
 
    function getIcu() {
-   
+
     $( document ).ready(function() {
 
         var date_before = new Date();
@@ -175,13 +175,13 @@
         date_after.setDate(date_after.getDate() - 1);
 
         var before = date_before.toJSON().substring(0,10).split("-");
-        var after = date_after.toJSON().substring(0,10).split("-");          
+        var after = date_after.toJSON().substring(0,10).split("-");
 
         var url = "/api/" + after[0] + "/" + after[1] + "/" + after[2] + "/" + before[0] + "/" + before[1] + "/" + before[2];
-        
+
 
     $.ajax({
-            url: url, 
+            url: url,
             data_Type: "JSON",
             cache: false,
             success: function(data) {
@@ -189,13 +189,13 @@
                 ractive.set("icu", JSON.parse(data));
 
             }.bind(this),
-            
+
             error: function(xhr, status, err) {
                 console.log(err) ;
             }.bind(this)
          });
-        }); 
-    };   
+        });
+    };
 
     function getEditIcu(code) {
         $.ajax({
@@ -205,7 +205,7 @@
             success: function(data) {
                   rData = JSON.parse(data);
                   console.log(rData.data.length);
- 
+
                 if(rData.data.length != 0) {
                     editIcu =  rData;
                     ractive.set("editIcu", editIcu.data[0]);
@@ -214,19 +214,19 @@
                     ractive.set("color", "");
                 }
             }.bind(this),
-            
+
             error: function(xhr, status, err) {
                 console.log(err) ;
             }.bind(this)
         })
-    };    
+    };
 
 
     function postIcu() {
 
         var editIcu = ractive.get("editIcu");
         console.log(editIcu);
-        var saveIcu =  { 
+        var saveIcu =  {
                             "code": editIcu.code,
                             "name": editIcu.name,
                             "province": editIcu.province,
@@ -250,7 +250,7 @@
                 console.log(JSON.parse(data));
                 getIcuWithDate();
             }.bind(this),
-            
+
             error: function(xhr, status, err) {
                 console.log(err) ;
             }.bind(this)
@@ -262,7 +262,7 @@
 
         var editIcu = ractive.get("editIcu");
         console.log(editIcu);
-        var saveIcu =  { 
+        var saveIcu =  {
                                     "code": editIcu.code,
                                     "name": editIcu.name,
                                     "province": editIcu.province,
@@ -294,45 +294,45 @@
     var ractive = new Ractive({
         el: "#container",
         template: "#template",
-        data: { 
+        data: {
 
             icu: getIcu(),
             insuranceName: [ "Bilinmiyor", "SGK", "SSK", "Emekli Sandığı", "Bağkur", "Yeşilkart", "18 yaş altı", "Güvencesiz", "Suriyeli" ],
-            userName: [ "Yok" , "Murat Arıca", "Ayla Aslantaş", "Fulya Sağmak", 
+            userName: [ "Yok" , "Murat Arıca", "Ayla Aslantaş", "Fulya Sağmak",
                         "Özlem Çelik", "Birsen Günbaz", "Elvan Aydın Gök", "Güray Özalp", "Yeter Ağdak", "Zühal Kocatepe" ],
             icu_typeName: [ "Bilinmiyor/Yok", "Yenidoğan", "Çocuk", "Dahiliye", "Reanimasyon", "Nöroloji", "Beyin Cerrahi", "Koroner", "KVC", "Yanık", "Mikrocerrahi"],
             hospitalName: [ "Bilinmiyor", "ADH", "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
                             "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana", "G. Adana", "Algomed", "Acıbadem", "Metro" ],
-            
+
             provinceName: ["Bilinmiyor", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya",
                         "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl",
-                        "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum", 
+                        "Bitlis", "Bolu", "Burdur", "Bursa", "Çanakkale", "Çankırı", "Çorum",
                         "Denizli", "Diyarbakır", "Edirne", "Elazığ", "Erzincan", "Erzurum",
-                        "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkâri", "Hatay", 
+                        "Eskişehir", "Gaziantep", "Giresun", "Gümüşhane", "Hakkâri", "Hatay",
                         "Isparta", "Mersin", "İstanbul", "İzmir", "Kars", "Kastamonu", "Kayseri",
-                        "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya", 
+                        "Kırklareli", "Kırşehir", "Kocaeli", "Konya", "Kütahya", "Malatya",
                         "Manisa", "Kahramanmaraş", "Mardin", "Muğla", "Muş", "Nevşehir", "Niğde",
-                        "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas", 
+                        "Ordu", "Rize", "Sakarya", "Samsun", "Siirt", "Sinop", "Sivas",
                         "Tekirdağ", "Tokat", "Trabzon", "Tunceli", "Şanlıurfa", "Uşak",
-                        "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman", 
-                        "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır", 
+                        "Van", "Yozgat", "Zonguldak", "Aksaray", "Bayburt", "Karaman",
+                        "Kırıkkale", "Batman", "Şırnak", "Bartın", "Ardahan", "Iğdır",
                         "Yalova", "Karabük", "Kilis", "Osmaniye", "Düzce" ],
 
-            successName: [ "Yerleştirilemedi", "İptal", "Servis Hastası", "ADH", 
+            successName: [ "Yerleştirilemedi", "İptal", "Servis Hastası", "ADH",
                             "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
                             "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
                             "G. Adana", "Algomed", "Acıbadem", "Metro", "EPC"],
             newIcu: false,
             editIcu: {},
-            date_before: set_date_before(), 
+            date_before: set_date_before(),
             date_after: set_date_after()
-        } 
+        }
 
     });
- 
+
 ractive.observe("editIcu.province", function(newValue, oldValue) {
     if( newValue != 1) {
-        ractive.set("editIcu.hospital", 0);   
+        ractive.set("editIcu.hospital", 0);
         ractive.set("hdisabled", "disabled");
     }
     else {
@@ -343,7 +343,7 @@ ractive.observe("editIcu.province", function(newValue, oldValue) {
 ractive.on( "activeIcu", function ( event ) {
     $(".selected").removeClass("selected");
     $(event.node).addClass('selected');
-    
+
     getEditIcu(event.context.code);
     ractive.set("cdisabled", "disabled");
     ractive.set("newIcu", false);
@@ -373,13 +373,13 @@ ractive.on("date_after_change", function(event) {
 
 
 function getIcuWithDate() {
-    var date_after = ractive.get("date_after").split("-"); 
-    var date_before = ractive.get("date_before").split("-"); 
+    var date_after = ractive.get("date_after").split("-");
+    var date_before = ractive.get("date_before").split("-");
     url = "/api/" + date_after[0] + "/" + date_after[1] + "/" + date_after[2] + "/" + date_before[0] + "/" + date_before[1] + "/" + date_before[2];
     console.log(url);
 
         $.ajax({
-            url: url, 
+            url: url,
             data_Type: "JSON",
             cache: false,
             success: function(data) {
@@ -387,7 +387,7 @@ function getIcuWithDate() {
                 ractive.set("icu", JSON.parse(data));
 
             }.bind(this),
-            
+
             error: function(xhr, status, err) {
                 console.log(err) ;
             }.bind(this)
@@ -415,18 +415,18 @@ ractive.on("deleteIcu", function(event) {
     code = ractive.get("editIcu").code;
     if(parseInt(code)) {
     console.log(code);
-    
+
     if(confirm) {
         $.ajax({
-            type: "DELETE", 
+            type: "DELETE",
             url: "/api/" + code,
             data_Type: "JSON",
             cache: false,
-            success: function(data) { 
+            success: function(data) {
                   console.log(data);
                   getIcu();
                 }.bind(this),
-            
+
             error: function(xhr, status, err) {
                 console.log(err) ;
             }.bind(this)
@@ -438,7 +438,6 @@ ractive.on("deleteIcu", function(event) {
 ractive.on( 'sort', function ( event, column ) {
   console.log(column);
   this.set( 'sortColumn', column );
-
 });
 
 </script>

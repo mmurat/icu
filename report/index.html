@@ -14,13 +14,13 @@
         <div class="container">
             <div class="row">
                  <div class="col-md-3">
-                    <select>
-                        <option value="event">Vaka Sayıları - Günlük / Aylık</option>
-                        <option value="icu_type">Yoğunbakım Vaka Sayıları</option>
-                        <option value="source">İl İstek Vaka Sayıları</option>
-                        <option value="hospital">Hastane İstek Vaka Sayıları</option>
-                        <option value="success">Hastane Kabul Vaka Sayıları</option>
-                        <option value="user">Kullanıcı Hastane Kabul Vaka Sayıları</option>
+                    <select on_change="report_change" value="{{ report_number }}">
+                        <option value="0">Vaka Sayıları - Günlük / Aylık</option>
+                        <option value="1">Yoğunbakım Vaka Sayıları</option>
+                        <option value="2">İl İstek Vaka Sayıları</option>
+                        <option value="3">Hastane İstek Vaka Sayıları</option>
+                        <option value="4">Hastane Kabul Vaka Sayıları</option>
+                        <option value="5">Kullanıcı Hastane Kabul Vaka Sayıları</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -99,6 +99,45 @@
 </table>
 
 </div>
+<br />
+<div class="row">
+<div class="col-md-12">
+
+ <h3> {{ report_date }} Yoğunbakım Başvuru </h3>
+ <br />
+
+<table class="icuTable">
+    <tr>
+        <th>Yoğunbakım</th>
+        <th>Başvuru</th>
+        <th>Yerleşen</th>
+        <th>Adana Başvuru</th>
+        <th>Adana Yerleşen</th>
+        <th>İl Dışı Başvuru</th>
+        <th>İl Dışı Yerleşen</th>
+    </tr>
+
+    {{ #each i_report }}
+        <tr>
+            <td style="text-align: right;">{{ label }}</td>
+            <td style="text-align: right;">{{ value }}</td>
+            <td style="text-align: right;">{{ success }}</td>
+            <td style="text-align: right;">{{ in_ }}</td>
+            <td style="text-align: right;">{{ in_success }}</td>
+            <td style="text-align: right;">{{ out_ }}</td>
+            <td style="text-align: right;">{{ out_success }}</td>
+        </tr>
+    {{ /each }}
+
+
+</table>
+
+</div>
+</div>
+
+<br />
+
+
 </div>
 
 </div>
@@ -155,6 +194,106 @@
     value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0
   };
 
+  var icutype_report = [
+    { label: "Bilinmiyor/Yok", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "Yenidoğan", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "Çocuk", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "Dahiliye", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "Reanimasyon", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "Nöroloji", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "Beyin Cerrahi", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "Koroner", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "KVC", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "Yanık", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
+    { label: "Mikrocerrahi", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 }
+  ];
+
+
+  var province_report =  [
+    { label: "Bilinmiyor", value: 0, success: 0 },
+    { label: "Adana", value: 0, success: 0 },
+    { label: "Adıyaman", value: 0, success: 0 },
+    { label: "Afyonkarahisar", value: 0, success: 0 },
+    { label: "Ağrı", value: 0, success: 0 },
+    { label: "Amasya", value: 0, success: 0 },
+    { label: "Ankara", value: 0, success: 0 },
+    { label: "Antalya", value: 0, success: 0 },
+    { label: "Artvin", value: 0, success: 0 },
+    { label: "Aydın", value: 0, success: 0 },
+    { label: "Balıkesir", value: 0, success: 0 },
+    { label: "Bilecik", value: 0, success: 0 },
+    { label: "Bingöl", value: 0, success: 0 },
+    { label: "Bitlis", value: 0, success: 0 },
+    { label: "Bolu", value: 0, success: 0 },
+    { label: "Burdur", value: 0, success: 0 },
+    { label: "Bursa", value: 0, success: 0 },
+    { label: "Çanakkale", value: 0, success: 0 },
+    { label: "Çankırı", value: 0, success: 0 },
+    { label: "Çorum", value: 0, success: 0 },
+    { label: "Denizli", value: 0, success: 0 },
+    { label: "Diyarbakır", value: 0, success: 0 },
+    { label: "Edirne", value: 0, success: 0 },
+    { label: "Elazığ", value: 0, success: 0 },
+    { label: "Erzincan", value: 0, success: 0 },
+    { label: "Erzurum", value: 0, success: 0 },
+    { label: "Eskişehir", value: 0, success: 0 },
+    { label: "Gaziantep", value: 0, success: 0 },
+    { label: "Giresun", value: 0, success: 0 },
+    { label: "Gümüşhane", value: 0, success: 0 },
+    { label: "Hakkâri", value: 0, success: 0 },
+    { label: "Hatay", value: 0, success: 0 },
+    { label: "Isparta", value: 0, success: 0 },
+    { label: "Mersin", value: 0, success: 0 },
+    { label: "İstanbul", value: 0, success: 0 },
+    { label: "İzmir", value: 0, success: 0 },
+    { label: "Kars", value: 0, success: 0 },
+    { label: "Kastamonu", value: 0, success: 0 },
+    { label: "Kayseri", value: 0, success: 0 },
+    { label: "Kırklareli", value: 0, success: 0 },
+    { label: "Kırşehir", value: 0, success: 0 },
+    { label: "Kocaeli", value: 0, success: 0 },
+    { label: "Konya", value: 0, success: 0 },
+    { label: "Kütahya", value: 0, success: 0 },
+    { label: "Malatya", value: 0, success: 0 },
+    { label: "Manisa", value: 0, success: 0 },
+    { label: "Kahramanmaraş", value: 0, success: 0 },
+    { label: "Mardin", value: 0, success: 0 },
+    { label: "Muğla", value: 0, success: 0 },
+    { label: "Muş", value: 0, success: 0 },
+    { label: "Nevşehir", value: 0, success: 0 },
+    { label: "Niğde", value: 0, success: 0 },
+    { label: "Ordu", value: 0, success: 0 },
+    { label: "Rize", value: 0, success: 0 },
+    { label: "Sakarya", value: 0, success: 0 },
+    { label: "Samsun", value: 0, success: 0 },
+    { label: "Siirt", value: 0, success: 0 },
+    { label: "Sinop", value: 0, success: 0 },
+    { label: "Sivas", value: 0, success: 0 },
+    { label: "Tekirdağ", value: 0, success: 0 },
+    { label: "Tokat", value: 0, success: 0 },
+    { label: "Trabzon", value: 0, success: 0 },
+    { label: "Tunceli", value: 0, success: 0 },
+    { label: "Şanlıurfa", value: 0, success: 0 },
+    { label: "Uşak", value: 0, success: 0 },
+    { label: "Van", value: 0, success: 0 },
+    { label: "Yozgat", value: 0, success: 0 },
+    { label: "Zonguldak", value: 0, success: 0 },
+    { label: "Aksaray", value: 0, success: 0 },
+    { label: "Bayburt", value: 0, success: 0 },
+    { label: "Karaman", value: 0, success: 0 },
+    { label: "Kırıkkale", value: 0, success: 0 },
+    { label: "Batman", value: 0, success: 0 },
+    { label: "Şırnak", value: 0, success: 0 },
+    { label: "Bartın", value: 0, success: 0 },
+    { label: "Ardahan", value: 0, success: 0 },
+    { label: "Iğdır", value: 0, success: 0 },
+    { label: "Yalova", value: 0, success: 0 },
+    { label: "Karabük", value: 0, success: 0 },
+    { label: "Kilis", value: 0, success: 0 },
+    { label: "Osmaniye", value: 0, success: 0 },
+    { label: "Düzce", value: 0, success: 0 }
+  ];
+
     function getMonthIcu() {
 
         var report_date = new Date().toJSON().substring(0, 7).split("-");
@@ -190,6 +329,29 @@
                     }
                   }
 
+
+                  for(i = 0; i < icu.length ; i++) {
+                    icutype_report[icu[i].icu_type].value += 1;
+
+                    if( (icu[i].success !=  0) &&  (icu[i].success !=  1) && (icu[i].success !=  2) ) {
+                      icutype_report[icu[i].icu_type].success += 1;
+
+                      if( icu[i].province == 1) {
+                        icutype_report[icu[i].icu_type].in_ += 1;
+                        icutype_report[icu[i].icu_type].in_success += 1;
+                      } else {
+                        icutype_report[icu[i].icu_type].out_ += 1;
+                        icutype_report[icu[i].icu_type].out_success += 1;
+                      }
+                    } else {
+                      if( icu[i].province == 1) {
+                        icutype_report[icu[i].icu_type].in_ += 1;
+                      } else {
+                        icutype_report[icu[i].icu_type].out_ += 1;
+                      }
+                    }
+                  }
+
                   for(i = 0; i < day_report.length; i++ ) {
                     day_report[i].date = day_report[i].date + report_date[1] + "/" + report_date[0];
                     month_total.value += day_report[i].value;
@@ -202,6 +364,7 @@
 
                   ractive.set("d_report", day_report);
                   ractive.set("m_report", month_total);
+                  ractive.set("i_report", icutype_report);
                 }.bind(this),
 
                 error: function(xhr, status, err) {
@@ -216,12 +379,17 @@
         data: {
 
             report_date: new Date().toJSON().substring(0, 7),
+            report_number: "0",
             d_report: {},
-            m_report: {}
+            m_report: {},
+            i_report: {}
         }
     });
 
     getMonthIcu();
+    ractive.on("report_number", function(event) {
+      console.log(event);
+    });
 
 </script>
 </body>
