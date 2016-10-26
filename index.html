@@ -79,19 +79,20 @@
     </div>
     </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-2">
+                <input on-change="date_after_change" type="date" value={{ date_after }}>
+            </div>
+            <div class="col-md-2">
+                <input on-change="date_before_change" type="date" value={{ date_before }}>
+            </div>
+
+            <div class="col-md-3">
             <div class="btn-group btn-group-justified">
                 <a on-click="newIcu" class="btn btn-link" style="color: {{ color }};"><b>Yeni</b></a>
                 <a on-click="saveIcu" href="#" class="btn btn-link"><b>Kaydet</b></a>
-                <a href="#" class="btn btn-link"><b>Vazgeç</b></a>
                 <a href="#" on-click="deleteIcu" class="btn btn-link"><b>Sil</b></a>
+                <a href="/report" class="btn btn-link"><b>Raporlar</b></a>
             </div>
-            </div>
-            <div class="col-md-3">
-                <input on-change="date_after_change" type="date" value={{ date_after }}>
-            </div>
-            <div class="col-md-3">
-                <input on-change="date_before_change" type="date" value={{ date_before }}>
             </div>
 
         </div>

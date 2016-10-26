@@ -1,396 +1,1015 @@
 <!doctype html>
 <html lang="tr">
+
 <head>
     <title>Adana 112 Koordinasyon</title>
     <meta http-equiv="content-type" content="text/html; charset=utf8" />
     <link rel="stylesheet" href="../css/bootstrap.min.css">
     <link rel="stylesheet" href="../css/style.css">
 </head>
+
 <body>
     <div id="container"></div>
 
     <script id="template" type="text/ractive">
-    <div class="well">
-        <div class="container">
-            <div class="row">
-                 <div class="col-md-3">
-                    <select on_change="report_change" value="{{ report_number }}">
-                        <option value="0">Vaka Sayıları - Günlük / Aylık</option>
-                        <option value="1">Yoğunbakım Vaka Sayıları</option>
-                        <option value="2">İl İstek Vaka Sayıları</option>
-                        <option value="3">Hastane İstek Vaka Sayıları</option>
+        <div class="well">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <select value="{{ report }}">
+                        <option value="d_report">Vaka Sayıları - Günlük / Aylık</option>
+                        <option value="i_report">Yoğunbakım Vaka Sayıları</option>
+                        <option value="p_report">İl İstek Vaka Sayıları</option>
+                        <option value="h_report">Hastane İstek Vaka Sayıları</option>
                         <option value="4">Hastane Kabul Vaka Sayıları</option>
-                        <option value="5">Kullanıcı Hastane Kabul Vaka Sayıları</option>
+                        <option value="u_report">Kullanıcı Hastane Kabul Vaka Sayıları</option>
                     </select>
-                </div>
-                <div class="col-md-3">
-                    <input on-change="date_change" type="month" value={{ report_date }}>
+                    </div>
+                    <div class="col-md-3">
+                        <input on-change="date_change" type="month" value={{ report_date }}>
+                    </div>
+                    <div class="col-md-3">
+                       <a href="/" class="btn btn-link"><b>Başvurular</b></a>
+                       </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <br />
+        <br />
 
-<div class="container">
-<div class="row">
-<div class="col-md-12">
+        <div class="container">
 
- <h3> {{ report_date }} Günlük Başvuru </h3>
- <br />
+            {{ #display_d_report }}
 
-<table class="icuTable">
-    <tr>
-        <th>Tarih</th>
-        <th>Başvuru</th>
-        <th>Yerleşen</th>
-        <th>Adana Başvuru</th>
-        <th>Adana Yerleşen</th>
-        <th>İl Dışı Başvuru</th>
-        <th>İl Dışı Yerleşen</th>
-    </tr>
+            <div class="row">
+                <div class="col-md-12">
 
-    {{ #each d_report }}
-        <tr>
-            <td style="text-align: right;">{{ date }}</td>
-            <td style="text-align: right;">{{ value }}</td>
-            <td style="text-align: right;">{{ success }}</td>
-            <td style="text-align: right;">{{ in_ }}</td>
-            <td style="text-align: right;">{{ in_success }}</td>
-            <td style="text-align: right;">{{ out_ }}</td>
-            <td style="text-align: right;">{{ out_success }}</td>
-        </tr>
-    {{ /each }}
+                    <h3> {{ report_date }} Günlük Başvuru </h3>
+                    <br />
 
+                    <table class="icuTable">
+                        <tr>
+                            <th>Tarih</th>
+                            <th>Başvuru</th>
+                            <th>Yerleşen</th>
+                            <th>Adana Başvuru</th>
+                            <th>Adana Yerleşen</th>
+                            <th>İl Dışı Başvuru</th>
+                            <th>İl Dışı Yerleşen</th>
+                        </tr>
 
-</table>
+                        {{ #each d_report:i }}
+                          {{#if d_report[i].value != 0}}
+                        <tr>
+                            <td style="text-align: right;">{{ date }}</td>
+                            <td style="text-align: right;">{{ value }}</td>
+                            <td style="text-align: right;">{{ success }}</td>
+                            <td style="text-align: right;">{{ in_ }}</td>
+                            <td style="text-align: right;">{{ in_success }}</td>
+                            <td style="text-align: right;">{{ out_ }}</td>
+                            <td style="text-align: right;">{{ out_success }}</td>
+                        </tr>
+                        {{/if}}
+                        {{ /each }}
+                    </table>
+                </div>
+            </div>
+            <br />
 
-</div>
-</div>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3> {{ report_date }} Toplam</h3>
+                    <br />
+                    <table class="icuTable">
+                        <tr>
+                            <th>Başvuru</th>
+                            <th>Yerleşen</th>
+                            <th>Adana Başvuru</th>
+                            <th>Adana Yerleşen</th>
+                            <th>İl Dışı Başvuru</th>
+                            <th>İl Dışı Yerleşen</th>
+                        </tr>
 
-<br />
-<div class="row">
-<div class="col-md-12">
+                        {{ #with m_report }}
+                        <tr>
+                            <td style="text-align: right;">{{ value }}</td>
+                            <td style="text-align: right;">{{ success }}</td>
+                            <td style="text-align: right;">{{ in_ }}</td>
+                            <td style="text-align: right;">{{ in_success }}</td>
+                            <td style="text-align: right;">{{ out_ }}</td>
+                            <td style="text-align: right;">{{ out_success }}</td>
+                        </tr>
+                        {{ /with }}
+                    </table>
+                </div>
+            </div>
+            <br /> {{ /display_d_report}} {{ #display_i_report }}
+            <div class="row">
+                <div class="col-md-12">
+                    <h3> {{ report_date }} Yoğunbakım Başvuru </h3>
+                    <br />
+                    <table class="icuTable">
+                        <tr>
+                            <th>Yoğunbakım</th>
+                            <th>Başvuru</th>
+                            <th>Yerleşen</th>
+                            <th>Adana Başvuru</th>
+                            <th>Adana Yerleşen</th>
+                            <th>İl Dışı Başvuru</th>
+                            <th>İl Dışı Yerleşen</th>
+                        </tr>
 
- <h3> {{ report_date }} Toplam</h3>
- <br />
+                        {{ #each i_report:i }}
+                        {{ #if i_report[i].value != 0}}
+                        <tr>
+                            <td style="text-align: right;">{{ label }}</td>
+                            <td style="text-align: right;">{{ value }}</td>
+                            <td style="text-align: right;">{{ success }}</td>
+                            <td style="text-align: right;">{{ in_ }}</td>
+                            <td style="text-align: right;">{{ in_success }}</td>
+                            <td style="text-align: right;">{{ out_ }}</td>
+                            <td style="text-align: right;">{{ out_success }}</td>
+                        </tr>
+                        {{ /if }}
+                        {{ /each }}
+                    </table>
 
-<table class="icuTable">
-    <tr>
-        <th>Başvuru</th>
-        <th>Yerleşen</th>
-        <th>Adana Başvuru</th>
-        <th>Adana Yerleşen</th>
-        <th>İl Dışı Başvuru</th>
-        <th>İl Dışı Yerleşen</th>
-    </tr>
+                </div>
+            </div>
+            {{ /display_i_report }}
 
-    {{ #with m_report }}
-        <tr>
-            <td style="text-align: right;">{{ value }}</td>
-            <td style="text-align: right;">{{ success }}</td>
-            <td style="text-align: right;">{{ in_ }}</td>
-            <td style="text-align: right;">{{ in_success }}</td>
-            <td style="text-align: right;">{{ out_ }}</td>
-            <td style="text-align: right;">{{ out_success }}</td>
-        </tr>
-    {{ /with }}
+            {{ #display_p_report}}
 
-</table>
+            <div class="row">
+                <div class="col-md-12">
+                    <h3> {{ report_date }} İl Başvuru </h3>
+                    <br />
+                    <table class="icuTable">
+                        <tr>
+                            <th>İl</th>
+                            <th>Başvuru</th>
+                            <th>Yerleşen</th>
+                        </tr>
 
-</div>
-<br />
-<div class="row">
-<div class="col-md-12">
-
- <h3> {{ report_date }} Yoğunbakım Başvuru </h3>
- <br />
-
-<table class="icuTable">
-    <tr>
-        <th>Yoğunbakım</th>
-        <th>Başvuru</th>
-        <th>Yerleşen</th>
-        <th>Adana Başvuru</th>
-        <th>Adana Yerleşen</th>
-        <th>İl Dışı Başvuru</th>
-        <th>İl Dışı Yerleşen</th>
-    </tr>
-
-    {{ #each i_report }}
-        <tr>
-            <td style="text-align: right;">{{ label }}</td>
-            <td style="text-align: right;">{{ value }}</td>
-            <td style="text-align: right;">{{ success }}</td>
-            <td style="text-align: right;">{{ in_ }}</td>
-            <td style="text-align: right;">{{ in_success }}</td>
-            <td style="text-align: right;">{{ out_ }}</td>
-            <td style="text-align: right;">{{ out_success }}</td>
-        </tr>
-    {{ /each }}
-
-
-</table>
-
-</div>
-</div>
-
-<br />
-
-
-</div>
-
-</div>
-
-    <br />
-    <div id="footer">
-      <div class="container">
-        <p class="copyright">&copy; 2016 Adana 112</p>
-      </div>
-    </div>
+                        {{ #each p_report:i }}
+                        {{ #if p_report[i].value != 0 }}
+                        <tr>
+                            <td style="text-align: right;">{{ label }}</td>
+                            <td style="text-align: right;">{{ value }}</td>
+                            <td style="text-align: right;">{{ success }}</td>
+                        </tr>
+                        {{ /if }}
+                        {{ /each }}
+                    </table>
+                </div>
+            </div>
+          {{ /display_p_report }}
+        </div>
+        <br />
+        <div id="footer">
+            <div class="container">
+                <p class="copyright">&copy; 2016 Adana 112</p>
+            </div>
+        </div>
 
     </script>
 
-<script src="../js/jquery-1.12.3.js"></script>
-<script src="../js/ractive.min.js"></script>
+    <script src="../js/jquery-1.12.3.js"></script>
+    <script src="../js/ractive.min.js"></script>
 
-<script>
+    <script>
 
-  var day_report = [
-    { day: 1, value: 0, success: 0, date: "01/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 2, value: 0, success: 0, date: "02/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 3, value: 0, success: 0, date: "03/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 4, value: 0, success: 0, date: "04/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 5, value: 0, success: 0, date: "05/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 6, value: 0, success: 0, date: "06/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 7, value: 0, success: 0, date: "07/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 8, value: 0, success: 0, date: "08/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 9, value: 0, success: 0, date: "09/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 10, value: 0, success: 0, date: "10/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 11, value: 0, success: 0, date: "11/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 12, value: 0, success: 0, date: "12/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 13, value: 0, success: 0, date: "13/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 14, value: 0, success: 0, date: "14/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 15, value: 0, success: 0, date: "15/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 16, value: 0, success: 0, date: "16/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 17, value: 0, success: 0, date: "17/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 18, value: 0, success: 0, date: "18/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 19, value: 0, success: 0, date: "19/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 20, value: 0, success: 0, date: "20/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 21, value: 0, success: 0, date: "21/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 22, value: 0, success: 0, date: "22/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 23, value: 0, success: 0, date: "23/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 24, value: 0, success: 0, date: "24/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 25, value: 0, success: 0, date: "25/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 26, value: 0, success: 0, date: "26/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 27, value: 0, success: 0, date: "27/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 28, value: 0, success: 0, date: "28/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 29, value: 0, success: 0, date: "29/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 30, value: 0, success: 0, date: "30/", in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { day: 31, value: 0, success: 0, date: "31/", in_: 0, in_success: 0, out_: 0, out_success: 0 }
-  ];
+function getMonthIcu() {
 
-  var month_total = {
-    value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0
-  };
+        var day_report = [{
+            day: 1,
+            value: 0,
+            success: 0,
+            date: "01/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 2,
+            value: 0,
+            success: 0,
+            date: "02/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 3,
+            value: 0,
+            success: 0,
+            date: "03/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 4,
+            value: 0,
+            success: 0,
+            date: "04/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 5,
+            value: 0,
+            success: 0,
+            date: "05/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 6,
+            value: 0,
+            success: 0,
+            date: "06/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 7,
+            value: 0,
+            success: 0,
+            date: "07/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 8,
+            value: 0,
+            success: 0,
+            date: "08/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 9,
+            value: 0,
+            success: 0,
+            date: "09/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 10,
+            value: 0,
+            success: 0,
+            date: "10/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 11,
+            value: 0,
+            success: 0,
+            date: "11/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 12,
+            value: 0,
+            success: 0,
+            date: "12/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 13,
+            value: 0,
+            success: 0,
+            date: "13/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 14,
+            value: 0,
+            success: 0,
+            date: "14/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 15,
+            value: 0,
+            success: 0,
+            date: "15/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 16,
+            value: 0,
+            success: 0,
+            date: "16/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 17,
+            value: 0,
+            success: 0,
+            date: "17/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 18,
+            value: 0,
+            success: 0,
+            date: "18/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 19,
+            value: 0,
+            success: 0,
+            date: "19/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 20,
+            value: 0,
+            success: 0,
+            date: "20/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 21,
+            value: 0,
+            success: 0,
+            date: "21/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 22,
+            value: 0,
+            success: 0,
+            date: "22/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 23,
+            value: 0,
+            success: 0,
+            date: "23/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 24,
+            value: 0,
+            success: 0,
+            date: "24/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 25,
+            value: 0,
+            success: 0,
+            date: "25/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 26,
+            value: 0,
+            success: 0,
+            date: "26/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 27,
+            value: 0,
+            success: 0,
+            date: "27/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 28,
+            value: 0,
+            success: 0,
+            date: "28/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 29,
+            value: 0,
+            success: 0,
+            date: "29/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 30,
+            value: 0,
+            success: 0,
+            date: "30/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            day: 31,
+            value: 0,
+            success: 0,
+            date: "31/",
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }];
 
-  var icutype_report = [
-    { label: "Bilinmiyor/Yok", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "Yenidoğan", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "Çocuk", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "Dahiliye", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "Reanimasyon", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "Nöroloji", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "Beyin Cerrahi", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "Koroner", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "KVC", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "Yanık", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 },
-    { label: "Mikrocerrahi", value: 0, success: 0, in_: 0, in_success: 0, out_: 0, out_success: 0 }
-  ];
+        var month_total = {
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        };
+
+        var icutype_report = [{
+            label: "Bilinmiyor/Yok",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "Yenidoğan",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "Çocuk",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "Dahiliye",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "Reanimasyon",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "Nöroloji",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "Beyin Cerrahi",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "Koroner",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "KVC",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "Yanık",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }, {
+            label: "Mikrocerrahi",
+            value: 0,
+            success: 0,
+            in_: 0,
+            in_success: 0,
+            out_: 0,
+            out_success: 0
+        }];
 
 
-  var province_report =  [
-    { label: "Bilinmiyor", value: 0, success: 0 },
-    { label: "Adana", value: 0, success: 0 },
-    { label: "Adıyaman", value: 0, success: 0 },
-    { label: "Afyonkarahisar", value: 0, success: 0 },
-    { label: "Ağrı", value: 0, success: 0 },
-    { label: "Amasya", value: 0, success: 0 },
-    { label: "Ankara", value: 0, success: 0 },
-    { label: "Antalya", value: 0, success: 0 },
-    { label: "Artvin", value: 0, success: 0 },
-    { label: "Aydın", value: 0, success: 0 },
-    { label: "Balıkesir", value: 0, success: 0 },
-    { label: "Bilecik", value: 0, success: 0 },
-    { label: "Bingöl", value: 0, success: 0 },
-    { label: "Bitlis", value: 0, success: 0 },
-    { label: "Bolu", value: 0, success: 0 },
-    { label: "Burdur", value: 0, success: 0 },
-    { label: "Bursa", value: 0, success: 0 },
-    { label: "Çanakkale", value: 0, success: 0 },
-    { label: "Çankırı", value: 0, success: 0 },
-    { label: "Çorum", value: 0, success: 0 },
-    { label: "Denizli", value: 0, success: 0 },
-    { label: "Diyarbakır", value: 0, success: 0 },
-    { label: "Edirne", value: 0, success: 0 },
-    { label: "Elazığ", value: 0, success: 0 },
-    { label: "Erzincan", value: 0, success: 0 },
-    { label: "Erzurum", value: 0, success: 0 },
-    { label: "Eskişehir", value: 0, success: 0 },
-    { label: "Gaziantep", value: 0, success: 0 },
-    { label: "Giresun", value: 0, success: 0 },
-    { label: "Gümüşhane", value: 0, success: 0 },
-    { label: "Hakkâri", value: 0, success: 0 },
-    { label: "Hatay", value: 0, success: 0 },
-    { label: "Isparta", value: 0, success: 0 },
-    { label: "Mersin", value: 0, success: 0 },
-    { label: "İstanbul", value: 0, success: 0 },
-    { label: "İzmir", value: 0, success: 0 },
-    { label: "Kars", value: 0, success: 0 },
-    { label: "Kastamonu", value: 0, success: 0 },
-    { label: "Kayseri", value: 0, success: 0 },
-    { label: "Kırklareli", value: 0, success: 0 },
-    { label: "Kırşehir", value: 0, success: 0 },
-    { label: "Kocaeli", value: 0, success: 0 },
-    { label: "Konya", value: 0, success: 0 },
-    { label: "Kütahya", value: 0, success: 0 },
-    { label: "Malatya", value: 0, success: 0 },
-    { label: "Manisa", value: 0, success: 0 },
-    { label: "Kahramanmaraş", value: 0, success: 0 },
-    { label: "Mardin", value: 0, success: 0 },
-    { label: "Muğla", value: 0, success: 0 },
-    { label: "Muş", value: 0, success: 0 },
-    { label: "Nevşehir", value: 0, success: 0 },
-    { label: "Niğde", value: 0, success: 0 },
-    { label: "Ordu", value: 0, success: 0 },
-    { label: "Rize", value: 0, success: 0 },
-    { label: "Sakarya", value: 0, success: 0 },
-    { label: "Samsun", value: 0, success: 0 },
-    { label: "Siirt", value: 0, success: 0 },
-    { label: "Sinop", value: 0, success: 0 },
-    { label: "Sivas", value: 0, success: 0 },
-    { label: "Tekirdağ", value: 0, success: 0 },
-    { label: "Tokat", value: 0, success: 0 },
-    { label: "Trabzon", value: 0, success: 0 },
-    { label: "Tunceli", value: 0, success: 0 },
-    { label: "Şanlıurfa", value: 0, success: 0 },
-    { label: "Uşak", value: 0, success: 0 },
-    { label: "Van", value: 0, success: 0 },
-    { label: "Yozgat", value: 0, success: 0 },
-    { label: "Zonguldak", value: 0, success: 0 },
-    { label: "Aksaray", value: 0, success: 0 },
-    { label: "Bayburt", value: 0, success: 0 },
-    { label: "Karaman", value: 0, success: 0 },
-    { label: "Kırıkkale", value: 0, success: 0 },
-    { label: "Batman", value: 0, success: 0 },
-    { label: "Şırnak", value: 0, success: 0 },
-    { label: "Bartın", value: 0, success: 0 },
-    { label: "Ardahan", value: 0, success: 0 },
-    { label: "Iğdır", value: 0, success: 0 },
-    { label: "Yalova", value: 0, success: 0 },
-    { label: "Karabük", value: 0, success: 0 },
-    { label: "Kilis", value: 0, success: 0 },
-    { label: "Osmaniye", value: 0, success: 0 },
-    { label: "Düzce", value: 0, success: 0 }
-  ];
+        var province_report = [{
+            label: "Bilinmiyor",
+            value: 0,
+            success: 0
+        }, {
+            label: "Adana",
+            value: 0,
+            success: 0
+        }, {
+            label: "Adıyaman",
+            value: 0,
+            success: 0
+        }, {
+            label: "Afyonkarahisar",
+            value: 0,
+            success: 0
+        }, {
+            label: "Ağrı",
+            value: 0,
+            success: 0
+        }, {
+            label: "Amasya",
+            value: 0,
+            success: 0
+        }, {
+            label: "Ankara",
+            value: 0,
+            success: 0
+        }, {
+            label: "Antalya",
+            value: 0,
+            success: 0
+        }, {
+            label: "Artvin",
+            value: 0,
+            success: 0
+        }, {
+            label: "Aydın",
+            value: 0,
+            success: 0
+        }, {
+            label: "Balıkesir",
+            value: 0,
+            success: 0
+        }, {
+            label: "Bilecik",
+            value: 0,
+            success: 0
+        }, {
+            label: "Bingöl",
+            value: 0,
+            success: 0
+        }, {
+            label: "Bitlis",
+            value: 0,
+            success: 0
+        }, {
+            label: "Bolu",
+            value: 0,
+            success: 0
+        }, {
+            label: "Burdur",
+            value: 0,
+            success: 0
+        }, {
+            label: "Bursa",
+            value: 0,
+            success: 0
+        }, {
+            label: "Çanakkale",
+            value: 0,
+            success: 0
+        }, {
+            label: "Çankırı",
+            value: 0,
+            success: 0
+        }, {
+            label: "Çorum",
+            value: 0,
+            success: 0
+        }, {
+            label: "Denizli",
+            value: 0,
+            success: 0
+        }, {
+            label: "Diyarbakır",
+            value: 0,
+            success: 0
+        }, {
+            label: "Edirne",
+            value: 0,
+            success: 0
+        }, {
+            label: "Elazığ",
+            value: 0,
+            success: 0
+        }, {
+            label: "Erzincan",
+            value: 0,
+            success: 0
+        }, {
+            label: "Erzurum",
+            value: 0,
+            success: 0
+        }, {
+            label: "Eskişehir",
+            value: 0,
+            success: 0
+        }, {
+            label: "Gaziantep",
+            value: 0,
+            success: 0
+        }, {
+            label: "Giresun",
+            value: 0,
+            success: 0
+        }, {
+            label: "Gümüşhane",
+            value: 0,
+            success: 0
+        }, {
+            label: "Hakkâri",
+            value: 0,
+            success: 0
+        }, {
+            label: "Hatay",
+            value: 0,
+            success: 0
+        }, {
+            label: "Isparta",
+            value: 0,
+            success: 0
+        }, {
+            label: "Mersin",
+            value: 0,
+            success: 0
+        }, {
+            label: "İstanbul",
+            value: 0,
+            success: 0
+        }, {
+            label: "İzmir",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kars",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kastamonu",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kayseri",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kırklareli",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kırşehir",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kocaeli",
+            value: 0,
+            success: 0
+        }, {
+            label: "Konya",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kütahya",
+            value: 0,
+            success: 0
+        }, {
+            label: "Malatya",
+            value: 0,
+            success: 0
+        }, {
+            label: "Manisa",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kahramanmaraş",
+            value: 0,
+            success: 0
+        }, {
+            label: "Mardin",
+            value: 0,
+            success: 0
+        }, {
+            label: "Muğla",
+            value: 0,
+            success: 0
+        }, {
+            label: "Muş",
+            value: 0,
+            success: 0
+        }, {
+            label: "Nevşehir",
+            value: 0,
+            success: 0
+        }, {
+            label: "Niğde",
+            value: 0,
+            success: 0
+        }, {
+            label: "Ordu",
+            value: 0,
+            success: 0
+        }, {
+            label: "Rize",
+            value: 0,
+            success: 0
+        }, {
+            label: "Sakarya",
+            value: 0,
+            success: 0
+        }, {
+            label: "Samsun",
+            value: 0,
+            success: 0
+        }, {
+            label: "Siirt",
+            value: 0,
+            success: 0
+        }, {
+            label: "Sinop",
+            value: 0,
+            success: 0
+        }, {
+            label: "Sivas",
+            value: 0,
+            success: 0
+        }, {
+            label: "Tekirdağ",
+            value: 0,
+            success: 0
+        }, {
+            label: "Tokat",
+            value: 0,
+            success: 0
+        }, {
+            label: "Trabzon",
+            value: 0,
+            success: 0
+        }, {
+            label: "Tunceli",
+            value: 0,
+            success: 0
+        }, {
+            label: "Şanlıurfa",
+            value: 0,
+            success: 0
+        }, {
+            label: "Uşak",
+            value: 0,
+            success: 0
+        }, {
+            label: "Van",
+            value: 0,
+            success: 0
+        }, {
+            label: "Yozgat",
+            value: 0,
+            success: 0
+        }, {
+            label: "Zonguldak",
+            value: 0,
+            success: 0
+        }, {
+            label: "Aksaray",
+            value: 0,
+            success: 0
+        }, {
+            label: "Bayburt",
+            value: 0,
+            success: 0
+        }, {
+            label: "Karaman",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kırıkkale",
+            value: 0,
+            success: 0
+        }, {
+            label: "Batman",
+            value: 0,
+            success: 0
+        }, {
+            label: "Şırnak",
+            value: 0,
+            success: 0
+        }, {
+            label: "Bartın",
+            value: 0,
+            success: 0
+        }, {
+            label: "Ardahan",
+            value: 0,
+            success: 0
+        }, {
+            label: "Iğdır",
+            value: 0,
+            success: 0
+        }, {
+            label: "Yalova",
+            value: 0,
+            success: 0
+        }, {
+            label: "Karabük",
+            value: 0,
+            success: 0
+        }, {
+            label: "Kilis",
+            value: 0,
+            success: 0
+        }, {
+            label: "Osmaniye",
+            value: 0,
+            success: 0
+        }, {
+            label: "Düzce",
+            value: 0,
+            success: 0
+        }];
 
-    function getMonthIcu() {
-
-        var report_date = new Date().toJSON().substring(0, 7).split("-");
-        var url = "/api/" + report_date[0] + "/" + report_date[1];
-        console.log(url);
+            var report_date = ractive.get("report_date").substring(0, 7).split("-");
+            var url = "/api/" + report_date[0] + "/" + report_date[1];
+            console.log(url);
 
             $.ajax({
                 url: url,
                 data_Type: "JSON",
                 cache: false,
                 success: function(data) {
-                icu = JSON.parse(data).data;
+                  icu = JSON.parse(data).data;
 
-                  for(i = 0; i < icu.length ; i++) {
-                    day = parseInt(icu[i].date.substring(0, 2));
-                    day_report[ day - 1 ].value = day_report[day - 1].value + 1;
+                    for (i = 0; i < icu.length; i++) {
+                        day = parseInt(icu[i].date.substring(0, 2));
+                        day_report[day - 1].value = day_report[day - 1].value + 1;
 
-                    if( (icu[i].success !=  0) &&  (icu[i].success !=  1) && (icu[i].success !=  2) ) {
-                      day_report[ day - 1 ].success = day_report[day - 1].success + 1;
-                      if( icu[i].province == 1) {
-                        day_report[ day - 1 ].in_ = day_report[ day - 1 ].in_ + 1;
-                        day_report[ day - 1 ].in_success = day_report[ day - 1 ].in_success + 1;
-                      } else {
-                        day_report[ day - 1 ].out_ = day_report[ day - 1 ].out_ + 1;
-                        day_report[ day - 1 ].out_success = day_report[ day - 1 ].out_success + 1;
-                      }
-                    } else {
-                      if( icu[i].province == 1) {
-                        day_report[ day - 1 ].in_ = day_report[ day - 1 ].in_ + 1;
-                      } else {
-                        day_report[ day - 1 ].out_ = day_report[ day - 1 ].out_ + 1;
-                      }
+                        if ((icu[i].success != 0) && (icu[i].success != 1) && (icu[i].success != 2)) {
+                            day_report[day - 1].success = day_report[day - 1].success + 1;
+                            if (icu[i].province == 1) {
+                                day_report[day - 1].in_ = day_report[day - 1].in_ + 1;
+                                day_report[day - 1].in_success = day_report[day - 1].in_success + 1;
+                            } else {
+                                day_report[day - 1].out_ = day_report[day - 1].out_ + 1;
+                                day_report[day - 1].out_success = day_report[day - 1].out_success + 1;
+                            }
+                        } else {
+                            if (icu[i].province == 1) {
+                                day_report[day - 1].in_ = day_report[day - 1].in_ + 1;
+                            } else {
+                                day_report[day - 1].out_ = day_report[day - 1].out_ + 1;
+                            }
+                        }
                     }
-                  }
 
 
-                  for(i = 0; i < icu.length ; i++) {
-                    icutype_report[icu[i].icu_type].value += 1;
+                    for (i = 0; i < icu.length; i++) {
+                        icutype_report[icu[i].icu_type].value += 1;
 
-                    if( (icu[i].success !=  0) &&  (icu[i].success !=  1) && (icu[i].success !=  2) ) {
-                      icutype_report[icu[i].icu_type].success += 1;
+                        if ((icu[i].success != 0) && (icu[i].success != 1) && (icu[i].success != 2)) {
+                            icutype_report[icu[i].icu_type].success += 1;
 
-                      if( icu[i].province == 1) {
-                        icutype_report[icu[i].icu_type].in_ += 1;
-                        icutype_report[icu[i].icu_type].in_success += 1;
-                      } else {
-                        icutype_report[icu[i].icu_type].out_ += 1;
-                        icutype_report[icu[i].icu_type].out_success += 1;
-                      }
-                    } else {
-                      if( icu[i].province == 1) {
-                        icutype_report[icu[i].icu_type].in_ += 1;
-                      } else {
-                        icutype_report[icu[i].icu_type].out_ += 1;
-                      }
+                            if (icu[i].province == 1) {
+                                icutype_report[icu[i].icu_type].in_ += 1;
+                                icutype_report[icu[i].icu_type].in_success += 1;
+                            } else {
+                                icutype_report[icu[i].icu_type].out_ += 1;
+                                icutype_report[icu[i].icu_type].out_success += 1;
+                            }
+                        } else {
+                            if (icu[i].province == 1) {
+                                icutype_report[icu[i].icu_type].in_ += 1;
+                            } else {
+                                icutype_report[icu[i].icu_type].out_ += 1;
+                            }
+                        }
                     }
-                  }
 
-                  for(i = 0; i < day_report.length; i++ ) {
-                    day_report[i].date = day_report[i].date + report_date[1] + "/" + report_date[0];
-                    month_total.value += day_report[i].value;
-                    month_total.success += day_report[i].success;
-                    month_total.in_ += day_report[i].in_;
-                    month_total.in_success += day_report[i].in_success
-                    month_total.out_ += day_report[i].out_;
-                    month_total.out_success += day_report[i].out_success
-                  }
 
-                  ractive.set("d_report", day_report);
-                  ractive.set("m_report", month_total);
-                  ractive.set("i_report", icutype_report);
+                    for (i = 0; i < icu.length; i++) {
+                        province_report[icu[i].province].value += 1;
+
+                        if ((icu[i].success != 0) && (icu[i].success != 1) && (icu[i].success != 2)) {
+                            province_report[icu[i].province].success += 1;
+                        }
+                    }
+
+
+                    for (i = 0; i < day_report.length; i++) {
+                        day_report[i].date = day_report[i].date + report_date[1] + "/" + report_date[0];
+                        month_total.value += day_report[i].value;
+                        month_total.success += day_report[i].success;
+                        month_total.in_ += day_report[i].in_;
+                        month_total.in_success += day_report[i].in_success
+                        month_total.out_ += day_report[i].out_;
+                        month_total.out_success += day_report[i].out_success
+                    }
+
+                    ractive.set("d_report", day_report);
+                    ractive.set("m_report", month_total);
+                    ractive.set("i_report", icutype_report);
+                    ractive.set("p_report", province_report);
                 }.bind(this),
 
                 error: function(xhr, status, err) {
-                    console.log(err) ;
+                    console.log(err);
                 }.bind(this)
-             });
-          };
+            });
+        };
 
-    var ractive = new Ractive({
-        el: "#container",
-        template: "#template",
-        data: {
+        var ractive = new Ractive({
+            el: "#container",
+            template: "#template",
+            data: {
 
-            report_date: new Date().toJSON().substring(0, 7),
-            report_number: "0",
-            d_report: {},
-            m_report: {},
-            i_report: {}
-        }
-    });
+                report_date: new Date().toJSON().substring(0, 7),
+                report: "d_report",
+                d_report: {},
+                m_report: {},
+                i_report: {},
+                p_report: {},
+                display_d_report: true,
+                display_i_report: false,
+                display_p_report: false
+            }
+        });
 
-    getMonthIcu();
-    ractive.on("report_number", function(event) {
-      console.log(event);
-    });
+        getMonthIcu();
 
-</script>
+        ractive.observe("report", function(newValue, oldValue) {
+          ractive.set("display_" + newValue, true);
+          if(oldValue != undefined)
+          ractive.set("display_" + oldValue, false);
+          });
+
+        ractive.on("date_change", function(event) {
+          getMonthIcu();
+        })
+
+    </script>
 </body>
+
 </html>
