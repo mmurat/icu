@@ -19,10 +19,9 @@
                         <select value="{{ report }}">
                         <option value="d_report">Vaka Sayıları - Günlük / Aylık</option>
                         <option value="i_report">Yoğunbakım Vaka Sayıları</option>
-                        <option value="p_report">İl İstek Vaka Sayıları</option>
-                        <option value="h_report">Hastane İstek Vaka Sayıları</option>
-                        <option value="4">Hastane Kabul Vaka Sayıları</option>
-                        <option value="u_report">Kullanıcı Hastane Kabul Vaka Sayıları</option>
+                        <option value="p_report">İl Yoğunbakım Talepleri</option>
+                        <option value="h_report">Hastane Yoğunbakım Talepleri</option>
+                        <option value="u_report">Kullanıcı Hastane Yerleşen</option>
                     </select>
                     </div>
                     <div class="col-md-3">
@@ -164,6 +163,34 @@
                 </div>
             </div>
           {{ /display_p_report }}
+
+          {{ #display_h_report}}
+
+          <div class="row">
+              <div class="col-md-12">
+                  <h3> {{ report_date }} Hastane Başvuru </h3>
+                  <br />
+                  <table class="icuTable">
+                      <tr>
+                          <th>Hastane</th>
+                          <th>Başvuru</th>
+                          <th>Yerleşen</th>
+                      </tr>
+
+                      {{ #each h_report:i }}
+                      {{ #if i != 0 }}
+                      <tr>
+                          <td style="text-align: right;">{{ label }}</td>
+                          <td style="text-align: right;">{{ value }}</td>
+                          <td style="text-align: right;">{{ success }}</td>
+                      </tr>
+                      {{ /if }}
+                      {{ /each }}
+                  </table>
+              </div>
+          </div>
+        {{ /display_h_report }}
+
         </div>
         <br />
         <div id="footer">
@@ -892,6 +919,29 @@ function getMonthIcu() {
             success: 0
         }];
 
+        var hospital_report =  [
+          { label: "Bilinmiyor", value: 0, success: 0 },
+          { label: "ADH", value: 0, success: 0 },
+          { label: "ÇDH", value: 0, success: 0 },
+          { label: "Numune", value: 0, success: 0 },
+          { label: "Balcalı", value: 0, success: 0 },
+          { label: "Marsa", value: 0, success: 0 },
+          { label: "Meydan", value: 0, success: 0 },
+          { label: "SUH", value: 0, success: 0 },
+          { label: "Y. Başkent", value: 0, success: 0 },
+          { label: "S. Başkent", value: 0, success: 0 },
+          { label: "Medline", value: 0, success: 0 },
+          { label: "Ortadoğu", value: 0, success: 0 },
+          { label: "Ö. Adana", value: 0, success: 0 },
+          { label: "G. Adana", value: 0, success: 0 },
+          { label: "Algomed", value: 0, success: 0 },
+          { label: "Acıbadem", value: 0, success: 0 },
+          { label: "Metro", value: 0, success: 0 },
+          { label: "EPC", value: 0, success: 0 },
+          { label: "Kozan Devlet", value: 0, success: 0 },
+          { label: "Ceyhan Devlet", value: 0, success: 0 }
+        ];
+
             var report_date = ractive.get("report_date").substring(0, 7).split("-");
             var url = "/api/" + report_date[0] + "/" + report_date[1];
             console.log(url);
@@ -902,6 +952,7 @@ function getMonthIcu() {
                 cache: false,
                 success: function(data) {
                   icu = JSON.parse(data).data;
+                  console.log(icu);
 
                     for (i = 0; i < icu.length; i++) {
                         day = parseInt(icu[i].date.substring(0, 2));
@@ -951,9 +1002,11 @@ function getMonthIcu() {
 
                     for (i = 0; i < icu.length; i++) {
                         province_report[icu[i].province].value += 1;
+                        hospital_report[icu[i].hospital].value += 1;
 
                         if ((icu[i].success != 0) && (icu[i].success != 1) && (icu[i].success != 2)) {
                             province_report[icu[i].province].success += 1;
+                            hospital_report[icu[i].success - 2].success += 1;
                         }
                     }
 
@@ -972,6 +1025,7 @@ function getMonthIcu() {
                     ractive.set("m_report", month_total);
                     ractive.set("i_report", icutype_report);
                     ractive.set("p_report", province_report);
+                    ractive.set("h_report", hospital_report);
                 }.bind(this),
 
                 error: function(xhr, status, err) {
@@ -991,6 +1045,7 @@ function getMonthIcu() {
                 m_report: {},
                 i_report: {},
                 p_report: {},
+                h_report: {},
                 display_d_report: true,
                 display_i_report: false,
                 display_p_report: false
