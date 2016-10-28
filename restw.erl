@@ -6,7 +6,10 @@
 -include_lib("stdlib/include/qlc.hrl").
 -include("icu.hrl").
 
--export([out/1, month_report/2]).
+-export([out/1, init/0]).
+
+init() ->
+  mnesia:start().
 
 formatDate( {_Date={Year,Month,Day},_Time={Hour,Minutes, _Seconds}}) ->
     list_to_bitstring(integer_to_list(Day) ++ "/" ++ integer_to_list(Month) ++ "/" ++
@@ -25,7 +28,7 @@ addIcu( Code, Name, Province, Hospital, Insurance, IcuType, Success, User ) ->
       user = User,
       date = erlang:localtime()},
 
-  io:format("~p:~p Adding Icu ~p~n", [?MODULE, ?LINE, NewRec]),
+%%  io:format("~p:~p Adding Icu ~p~n", [?MODULE, ?LINE, NewRec]),
   Add = fun() ->
           mnesia:write(NewRec)
         end,
@@ -54,14 +57,14 @@ method(Arg) ->
 
 out(Arg) ->
   Method = method(Arg),
-  io:format("~p: ~p ~p Request ~n", [?MODULE, ?LINE, Method]),
+%  io:format("~p: ~p ~p Request ~n", [?MODULE, ?LINE, Method]),
   handle(Method, Arg).
 
 handle('GET', Arg) ->
 
     Uri = yaws_api:request_url(Arg),
     Path = string:tokens(Uri#url.path, "/"),
-    io:format("~p", [Path]),
+%%    io:format("~p", [Path]),
 
 handle('GET', Arg, Path);
 
@@ -69,9 +72,9 @@ handle('GET', Arg, Path);
 
 handle('POST', Arg) ->
 
-    io:format("~n~p:~p POST request ~p~n", [?MODULE, ?LINE, yaws_api:parse_post(Arg)]),
+%%    io:format("~n~p:~p POST request ~p~n", [?MODULE, ?LINE, yaws_api:parse_post(Arg)]),
     Icu = yaws_api:parse_post(Arg),
-    io:format("~n~p:~p POST request ~p~n", [?MODULE, ?LINE, Icu]),
+%%    io:format("~n~p:~p POST request ~p~n", [?MODULE, ?LINE, Icu]),
 
   [ {"code", Code}, {"name", Name}, {"province", Province}, {"hospital", Hospital},
    {"icu_type", IcuType}, {"insurance", Insurance},  {"success", Success}, {"user", User}] = Icu,
@@ -87,8 +90,8 @@ handle('POST', Arg) ->
 
   handle('PUT', Arg) ->
 
-    io:format("~p:~p PUT request ~p ~n",
-      [?MODULE, ?LINE, yaws_api:parse_post(Arg)]),
+%    io:format("~p:~p PUT request ~p ~n",
+%      [?MODULE, ?LINE, yaws_api:parse_post(Arg)]),
     Icu = yaws_api:parse_post(Arg),
     [ {"code", Code}, {"name", Name}, {"province", Province}, {"hospital", Hospital},
       {"icu_type", IcuType}, {"insurance", Insurance},  {"success", Success}, {"user", User}] = Icu,
@@ -110,8 +113,8 @@ handle('POST', Arg) ->
       date = Record#icu.date
     },
 
-    io:format("~p:~p Renaming ~p",
-      [?MODULE, ?LINE, NewRec]),
+%    io:format("~p:~p Renaming ~p",
+%      [?MODULE, ?LINE, NewRec]),
 
     ChangeIcu         = fun() ->
                             mnesia:delete({icu, Code}),
@@ -129,8 +132,8 @@ handle('POST', Arg) ->
     ["api", Code]     = Path,
 
 
-    io:format("~p:~p DELETE request ~p",
-      [?MODULE, ?LINE, Code]),
+%    io:format("~p:~p DELETE request ~p",
+%      [?MODULE, ?LINE, Code]),
 
     Delete              = fun() ->
       mnesia:delete({icu, list_to_integer(Code)})
@@ -156,12 +159,12 @@ handle('POST', Arg) ->
 
       handle('GET', _Arg, ["api", Year, Month]) ->
 
-        io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
+%        io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
         Report = month_report(list_to_integer(Year), list_to_integer(Month)),
 
         Json = convert_to_json(Report),
 
-        io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
+%        io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
 
         [{status, 200},
           {header, {content_type, "text/html; charset=UTF-8"}},
@@ -201,8 +204,8 @@ handle('POST', Arg) ->
       { atomic, Records } = mnesia:transaction(Fun),
 
       Json = convert_to_json(lists:reverse(Records)),
-      io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
 
+      %      io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
       [{status, 200},
         {header, {content_type, "text/html; charset=UTF-8"}},
         {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
@@ -211,7 +214,7 @@ handle('POST', Arg) ->
 
   handle('GET', _Arg, ["api", Code]) ->
 
-      io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
+  %    io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
 
       Fun = fun() ->
         mnesia:read({icu, list_to_integer(Code)})
@@ -219,7 +222,7 @@ handle('POST', Arg) ->
       { atomic, Records } = mnesia:transaction(Fun),
 
       Json = convert_to_json(Records),
-      io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
+  %    io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
 
       [{status, 200},
         {header, {content_type, "text/html; charset=UTF-8"}},
