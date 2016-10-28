@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="tr">
+<html>
 <head>
     <title>Adana 112 Koordinasyon</title>
     <meta http-equiv="content-type" content="text/html; charset=utf8" />
@@ -303,7 +303,8 @@
                         "Özlem Çelik", "Birsen Günbaz", "Elvan Aydın Gök", "Güray Özalp", "Yeter Ağdak", "Zühal Kocatepe" ],
             icu_typeName: [ "Bilinmiyor/Yok", "Yenidoğan", "Çocuk", "Dahiliye", "Reanimasyon", "Nöroloji", "Beyin Cerrahi", "Koroner", "KVC", "Yanık", "Mikrocerrahi"],
             hospitalName: [ "Bilinmiyor", "ADH", "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
-                            "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana", "G. Adana", "Algomed", "Acıbadem", "Metro" ],
+                            "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
+                            "G. Adana", "Algomed", "Acıbadem", "Metro", "EPC", "Kozan Devlet", "Ceyhan Devlet" ],
 
             provinceName: ["Bilinmiyor", "Adana", "Adıyaman", "Afyonkarahisar", "Ağrı", "Amasya",
                         "Ankara", "Antalya", "Artvin", "Aydın", "Balıkesir", "Bilecik", "Bingöl",
@@ -322,7 +323,7 @@
             successName: [ "Yerleştirilemedi", "İptal", "Servis Hastası", "ADH",
                             "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
                             "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
-                            "G. Adana", "Algomed", "Acıbadem", "Metro", "EPC"],
+                            "G. Adana", "Algomed", "Acıbadem", "Metro", "EPC", "Kozan Devlet", "Ceyhan Devlet"],
             newIcu: false,
             editIcu: {},
             date_before: set_date_before(),
@@ -362,7 +363,18 @@ ractive.on("newIcu", function(event) {
 
 ractive.on("editIcuCodeChange", function(event) {
 
+  code = ractive.get("editIcu").code;
+  c = parseInt(code)
+  if(c) {
+    if (c > 0) {
     getEditIcu(event.context.editIcu.code);
+  } else {
+    ractive.set("editIcu", "");
+  }
+} else {
+    ractive.set("editIcu", "");
+  }
+
 /*  ractive.set("cdisabled", "disabled");
     ractive.set("newIcu", false);
     ractive.set("color", "");
