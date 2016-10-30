@@ -27,6 +27,32 @@
                     <div class="col-md-3">
                         <input on-change="date_change" type="month" value={{ report_date }}>
                     </div>
+            <!--        <div class="col-md-3">
+                    <select value={{ success }}>
+                        <option value = 0>Yerleştirilemedi</option>
+                        <option value = 1>İptal</option>
+                        <option value = 2>Servis Hastası</option>
+                        <option value = 3>ADHk</option>
+                        <option value = 4>ÇDH</option>
+                        <option value = 5>Numune</option>
+                        <option value = 6>Balcalı</option>
+                        <option value = 7>Marsa</option>
+                        <option value = 8>Meydan</option>
+                        <option value = 9>SUH</option>
+                        <option value = 10>Y. Başkent</option>
+                        <option value = 11>S. Başkent</option>
+                        <option value = 12>Medline</option>
+                        <option value = 13>Ortadoğu</option>
+                        <option value = 14>S. Başkent</option>
+                        <option value = 15>G. Adana</option>
+                        <option value = 16>Algomd</option>
+                        <option value = 17>Acıbadem</option>
+                        <option value = 18>Metro</option>
+                        <option value = 19>EPC</option>
+                        <option value = 20>Kozan Devlet</option>
+                        <option value = 21>Ceyhan Devlet</option>
+                    </select>
+                    </div> -->
                     <div class="col-md-3">
                        <a href="/" class="btn btn-link"><b>Başvurular</b></a>
                        </div>
@@ -189,7 +215,75 @@
                   </table>
               </div>
           </div>
+
         {{ /display_h_report }}
+
+
+       {{ #display_u_report}}
+
+        <div class="row">
+            <div class="col-md-12">
+                <h3> {{ report_date }} Kullanıcı </h3>
+                <br />
+                <table class="icuTable">
+                    <tr>
+                        <th style="font-size: 70%;">Kullanıcı</th>
+                        <th style="font-size: 70%;">{{ successName[0] }}</th>
+                        <th style="font-size: 70%;">{{ successName[1] }}</th>
+                        <th style="font-size: 70%;">{{ successName[2] }}</th>
+                        <th style="font-size: 70%;">{{ successName[3] }}</th>
+                        <th style="font-size: 70%;">{{ successName[4] }}</th>
+                        <th style="font-size: 70%;">{{ successName[5] }}</th>
+                        <th style="font-size: 70%;">{{ successName[6] }}</th>
+                        <th style="font-size: 70%;">{{ successName[7] }}</th>
+                        <th style="font-size: 70%;">{{ successName[8] }}</th>
+                        <th style="font-size: 70%;">{{ successName[9] }}</th>
+                        <th style="font-size: 70%;">{{ successName[10] }}</th>
+                        <th style="font-size: 70%;">{{ successName[11] }}</th>
+                        <th style="font-size: 70%;">{{ successName[12] }}</th>
+                        <th style="font-size: 70%;">{{ successName[13] }}</th>
+                        <th style="font-size: 70%;">{{ successName[14] }}</th>
+                        <th style="font-size: 70%;">{{ successName[15] }}</th>
+                        <th style="font-size: 70%;">{{ successName[16] }}</th>
+                        <th style="font-size: 70%;">{{ successName[17] }}</th>
+                        <th style="font-size: 70%;">{{ successName[18] }}</th>
+                        <th style="font-size: 70%;">{{ successName[19] }}</th>
+                        <th style="font-size: 70%;">{{ successName[20] }}</th>
+                        <th style="font-size: 70%;">{{ successName[21] }}</th>
+                    </tr>
+
+                    {{ #each u_report:i}}
+                    <tr>
+                        <td style="text-align: right; font-size: 70%;">{{ u_report[i].label }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v0 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v1 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v2 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v3 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v4 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v5 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v6 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v7 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v8 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v9 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v10 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v11 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v12 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v13 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v14 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v15 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v16 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v17 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v18 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v19 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v20 }}</td>
+                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v21 }}</td>
+                    </tr>
+                    {{ /each }}
+                </table>
+            </div>
+        </div>
+
+      {{ /display_u_report }}
 
         </div>
         <br />
@@ -205,6 +299,9 @@
     <script src="../js/ractive.min.js"></script>
 
     <script>
+
+
+
 
 function getMonthIcu() {
 
@@ -942,9 +1039,44 @@ function getMonthIcu() {
           { label: "Ceyhan Devlet", value: 0, success: 0 }
         ];
 
+        var user_report = [
+          { label: "Yok", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
+          { label: "Murat Arıca", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
+          { label: "Ayla Aslantaş", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
+          { label: "Fulya Sağmak", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
+          { label: "Özlem Çelik", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
+          { label: "Birsen Günbaz", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
+          { label: "Elvan Aydın Gök", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
+          { label: "Güray Özalp", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
+          { label: "Yeter Ağdak", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
+          { label: "Zühal Kocatepe", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
+                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
+                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 }
+        ];
+
+
+
             var report_date = ractive.get("report_date").substring(0, 7).split("-");
             var url = "/api/" + report_date[0] + "/" + report_date[1];
-            console.log(url);
+            //console.log(url);
 
             $.ajax({
                 url: url,
@@ -952,7 +1084,7 @@ function getMonthIcu() {
                 cache: false,
                 success: function(data) {
                   icu = JSON.parse(data).data;
-                  console.log(icu);
+                  //console.log(icu);
 
                     for (i = 0; i < icu.length; i++) {
                         day = parseInt(icu[i].date.substring(0, 2));
@@ -1010,6 +1142,77 @@ function getMonthIcu() {
                         }
                     }
 
+                    for (i = 0; i < icu.length; i++) {
+                        switch(icu[i].success) {
+                          case 0:
+                              user_report[icu[i].user].v0 += 1;
+                              break;
+                          case 1:
+                              user_report[icu[i].user].v1 += 1;
+                              break;
+                          case 2:
+                              user_report[icu[i].user].v2 += 1;
+                              break;
+                          case 3:
+                              user_report[icu[i].user].v3 += 1;
+                              break;
+                          case 4:
+                              user_report[icu[i].user].v4 += 1;
+                              break;
+                          case 5:
+                              user_report[icu[i].user].v5 += 1;
+                              break;
+                          case 6:
+                              user_report[icu[i].user].v6 += 1;
+                              break;
+                          case 7:
+                              user_report[icu[i].user].v7 += 1;
+                              break;
+                          case 8:
+                              user_report[icu[i].user].v8 += 1;
+                              break;
+                          case 9:
+                              user_report[icu[i].user].v9 += 1;
+                              break;
+                          case 10:
+                              user_report[icu[i].user].v10 += 1;
+                              break;
+                          case 11:
+                              user_report[icu[i].user].v11 += 1;
+                              break;
+                          case 12:
+                              user_report[icu[i].user].v12 += 1;
+                              break;
+                          case 13:
+                              user_report[icu[i].user].v13 += 1;
+                              break;
+                          case 14:
+                              user_report[icu[i].user].v14 += 1;
+                              break;
+                          case 15:
+                              user_report[icu[i].user].v15 += 1;
+                              break;
+                          case 16:
+                              user_report[icu[i].user].v16 += 1;
+                              break;
+                          case 17:
+                              user_report[icu[i].user].v17 += 1;
+                              break;
+                          case 18:
+                              user_report[icu[i].user].v18 += 1;
+                              break;
+                          case 19:
+                              user_report[icu[i].user].v19 += 1;
+                              break;
+                          case 20:
+                              user_report[icu[i].user].v20 += 1;
+                              break;
+                          case 21:
+                              user_report[icu[i].user].v21 += 1;
+                              break;
+                          default:
+                         }
+                       }
 
                     for (i = 0; i < day_report.length; i++) {
                         day_report[i].date = day_report[i].date + report_date[1] + "/" + report_date[0];
@@ -1026,6 +1229,7 @@ function getMonthIcu() {
                     ractive.set("i_report", icutype_report);
                     ractive.set("p_report", province_report);
                     ractive.set("h_report", hospital_report);
+                    ractive.set("u_report", user_report);
                 }.bind(this),
 
                 error: function(xhr, status, err) {
@@ -1041,14 +1245,22 @@ function getMonthIcu() {
 
                 report_date: new Date().toJSON().substring(0, 7),
                 report: "d_report",
+                success: 0,
                 d_report: {},
                 m_report: {},
                 i_report: {},
                 p_report: {},
                 h_report: {},
+                u_report: {},
+                _u_report: [],
                 display_d_report: true,
                 display_i_report: false,
-                display_p_report: false
+                display_p_report: false,
+                successName:  [ "Yerleştirilemedi", "İptal", "Servis Hastası", "ADH",
+                                 "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
+                                  "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
+                                  "G. Adana", "Algomed", "Acıbadem", "Metro", "EPC", "Kozan Devlet",
+                                  "Ceyhan Devlet"]
             }
         });
 
@@ -1062,7 +1274,7 @@ function getMonthIcu() {
 
         ractive.on("date_change", function(event) {
           getMonthIcu();
-        })
+        });
 
     </script>
 </body>
