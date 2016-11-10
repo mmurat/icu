@@ -26,6 +26,11 @@
 	name
 }).
 
+-record(success, {
+	code,
+	name
+}).
+
 -record(icu, {
 	code,
   name,
@@ -34,7 +39,7 @@
   insurance = 0,
 	icu_type = 0,
   user = 0,
-  success = 100,
+  success = 0,
   date
 }).
 

@@ -27,7 +27,7 @@
                     <div class="col-md-3">
                         <input on-change="date_change" type="month" value={{ report_date }}>
                     </div>
-            <!--        <div class="col-md-3">
+                    <!--        <div class="col-md-3">
                     <select value={{ success }}>
                         <option value = 0>Yerleştirilemedi</option>
                         <option value = 1>İptal</option>
@@ -54,8 +54,8 @@
                     </select>
                     </div> -->
                     <div class="col-md-3">
-                       <a href="/" class="btn btn-link"><b>Başvurular</b></a>
-                       </div>
+                        <a href="/" class="btn btn-link"><b>Başvurular</b></a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -83,8 +83,7 @@
                             <th>İl Dışı Yerleşen</th>
                         </tr>
 
-                        {{ #each d_report:i }}
-                          {{#if d_report[i].value != 0}}
+                        {{ #each d_report:i }} {{#if d_report[i].value != 0}}
                         <tr>
                             <td style="text-align: right;">{{ date }}</td>
                             <td style="text-align: right;">{{ value }}</td>
@@ -94,8 +93,7 @@
                             <td style="text-align: right;">{{ out_ }}</td>
                             <td style="text-align: right;">{{ out_success }}</td>
                         </tr>
-                        {{/if}}
-                        {{ /each }}
+                        {{/if}} {{ /each }}
                     </table>
                 </div>
             </div>
@@ -144,8 +142,7 @@
                             <th>İl Dışı Yerleşen</th>
                         </tr>
 
-                        {{ #each i_report:i }}
-                        {{ #if i_report[i].value != 0}}
+                        {{ #each i_report:i }} {{ #if i_report[i].value != 0}}
                         <tr>
                             <td style="text-align: right;">{{ label }}</td>
                             <td style="text-align: right;">{{ value }}</td>
@@ -155,15 +152,12 @@
                             <td style="text-align: right;">{{ out_ }}</td>
                             <td style="text-align: right;">{{ out_success }}</td>
                         </tr>
-                        {{ /if }}
-                        {{ /each }}
+                        {{ /if }} {{ /each }}
                     </table>
 
                 </div>
             </div>
-            {{ /display_i_report }}
-
-            {{ #display_p_report}}
+            {{ /display_i_report }} {{ #display_p_report}}
 
             <div class="row">
                 <div class="col-md-12">
@@ -176,114 +170,105 @@
                             <th>Yerleşen</th>
                         </tr>
 
-                        {{ #each p_report:i }}
-                        {{ #if p_report[i].value != 0 }}
+                        {{ #each p_report:i }} {{ #if p_report[i].value != 0 }}
                         <tr>
                             <td style="text-align: right;">{{ label }}</td>
                             <td style="text-align: right;">{{ value }}</td>
                             <td style="text-align: right;">{{ success }}</td>
                         </tr>
-                        {{ /if }}
+                        {{ /if }} {{ /each }}
+                    </table>
+                </div>
+            </div>
+            {{ /display_p_report }} {{ #display_h_report}}
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h3> {{ report_date }} Hastane Başvuru </h3>
+                    <br />
+                    <table class="icuTable">
+                        <tr>
+                            <th>Hastane</th>
+                            <th>Başvuru</th>
+                            <th>Yerleşen</th>
+                        </tr>
+
+                        {{ #each h_report:i }} {{ #if i != 0 }}
+                        <tr>
+                            <td style="text-align: right;">{{ label }}</td>
+                            <td style="text-align: right;">{{ value }}</td>
+                            <td style="text-align: right;">{{ success }}</td>
+                        </tr>
+                        {{ /if }} {{ /each }}
+                    </table>
+                </div>
+            </div>
+
+            {{ /display_h_report }} {{ #display_u_report}}
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h3> {{ report_date }} Kullanıcı </h3>
+                    <br />
+                    <table class="icuTable">
+                        <tr>
+                            <th style="font-size: 70%;">Kullanıcı</th>
+                            <th style="font-size: 70%;">{{ successName[0] }}</th>
+                            <th style="font-size: 70%;">{{ successName[1] }}</th>
+                            <th style="font-size: 70%;">{{ successName[2] }}</th>
+                            <th style="font-size: 70%;">{{ successName[3] }}</th>
+                            <th style="font-size: 70%;">{{ successName[4] }}</th>
+                            <th style="font-size: 70%;">{{ successName[5] }}</th>
+                            <th style="font-size: 70%;">{{ successName[6] }}</th>
+                            <th style="font-size: 70%;">{{ successName[7] }}</th>
+                            <th style="font-size: 70%;">{{ successName[8] }}</th>
+                            <th style="font-size: 70%;">{{ successName[9] }}</th>
+                            <th style="font-size: 70%;">{{ successName[10] }}</th>
+                            <th style="font-size: 70%;">{{ successName[11] }}</th>
+                            <th style="font-size: 70%;">{{ successName[12] }}</th>
+                            <th style="font-size: 70%;">{{ successName[13] }}</th>
+                            <th style="font-size: 70%;">{{ successName[14] }}</th>
+                            <th style="font-size: 70%;">{{ successName[15] }}</th>
+                            <th style="font-size: 70%;">{{ successName[16] }}</th>
+                            <th style="font-size: 70%;">{{ successName[17] }}</th>
+                            <th style="font-size: 70%;">{{ successName[18] }}</th>
+                            <th style="font-size: 70%;">{{ successName[19] }}</th>
+                            <th style="font-size: 70%;">{{ successName[20] }}</th>
+                            <th style="font-size: 70%;">{{ successName[21] }}</th>
+                        </tr>
+
+                        {{ #each u_report:i}}
+                        <tr>
+                            <td style="text-align: right; font-size: 70%;">{{ u_report[i].label }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v0 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v1 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v2 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v3 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v4 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v5 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v6 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v7 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v8 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v9 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v10 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v11 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v12 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v13 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v14 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v15 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v16 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v17 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v18 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v19 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v20 }}</td>
+                            <td style="text-align: center; font-size: 70%;">{{ u_report[i].v21 }}</td>
+                        </tr>
                         {{ /each }}
                     </table>
                 </div>
             </div>
-          {{ /display_p_report }}
 
-          {{ #display_h_report}}
-
-          <div class="row">
-              <div class="col-md-12">
-                  <h3> {{ report_date }} Hastane Başvuru </h3>
-                  <br />
-                  <table class="icuTable">
-                      <tr>
-                          <th>Hastane</th>
-                          <th>Başvuru</th>
-                          <th>Yerleşen</th>
-                      </tr>
-
-                      {{ #each h_report:i }}
-                      {{ #if i != 0 }}
-                      <tr>
-                          <td style="text-align: right;">{{ label }}</td>
-                          <td style="text-align: right;">{{ value }}</td>
-                          <td style="text-align: right;">{{ success }}</td>
-                      </tr>
-                      {{ /if }}
-                      {{ /each }}
-                  </table>
-              </div>
-          </div>
-
-        {{ /display_h_report }}
-
-
-       {{ #display_u_report}}
-
-        <div class="row">
-            <div class="col-md-12">
-                <h3> {{ report_date }} Kullanıcı </h3>
-                <br />
-                <table class="icuTable">
-                    <tr>
-                        <th style="font-size: 70%;">Kullanıcı</th>
-                        <th style="font-size: 70%;">{{ successName[0] }}</th>
-                        <th style="font-size: 70%;">{{ successName[1] }}</th>
-                        <th style="font-size: 70%;">{{ successName[2] }}</th>
-                        <th style="font-size: 70%;">{{ successName[3] }}</th>
-                        <th style="font-size: 70%;">{{ successName[4] }}</th>
-                        <th style="font-size: 70%;">{{ successName[5] }}</th>
-                        <th style="font-size: 70%;">{{ successName[6] }}</th>
-                        <th style="font-size: 70%;">{{ successName[7] }}</th>
-                        <th style="font-size: 70%;">{{ successName[8] }}</th>
-                        <th style="font-size: 70%;">{{ successName[9] }}</th>
-                        <th style="font-size: 70%;">{{ successName[10] }}</th>
-                        <th style="font-size: 70%;">{{ successName[11] }}</th>
-                        <th style="font-size: 70%;">{{ successName[12] }}</th>
-                        <th style="font-size: 70%;">{{ successName[13] }}</th>
-                        <th style="font-size: 70%;">{{ successName[14] }}</th>
-                        <th style="font-size: 70%;">{{ successName[15] }}</th>
-                        <th style="font-size: 70%;">{{ successName[16] }}</th>
-                        <th style="font-size: 70%;">{{ successName[17] }}</th>
-                        <th style="font-size: 70%;">{{ successName[18] }}</th>
-                        <th style="font-size: 70%;">{{ successName[19] }}</th>
-                        <th style="font-size: 70%;">{{ successName[20] }}</th>
-                        <th style="font-size: 70%;">{{ successName[21] }}</th>
-                    </tr>
-
-                    {{ #each u_report:i}}
-                    <tr>
-                        <td style="text-align: right; font-size: 70%;">{{ u_report[i].label }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v0 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v1 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v2 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v3 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v4 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v5 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v6 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v7 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v8 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v9 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v10 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v11 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v12 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v13 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v14 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v15 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v16 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v17 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v18 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v19 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v20 }}</td>
-                        <td style="text-align: center; font-size: 70%;">{{ u_report[i].v21 }}</td>
-                    </tr>
-                    {{ /each }}
-                </table>
-            </div>
-        </div>
-
-      {{ /display_u_report }}
+            {{ /display_u_report }}
 
         </div>
         <br />
@@ -299,778 +284,1054 @@
     <script src="../js/ractive.min.js"></script>
 
     <script>
+        function getMonthIcu() {
+
+            var day_report = [{
+                day: 1,
+                value: 0,
+                success: 0,
+                date: "01/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 2,
+                value: 0,
+                success: 0,
+                date: "02/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 3,
+                value: 0,
+                success: 0,
+                date: "03/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 4,
+                value: 0,
+                success: 0,
+                date: "04/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 5,
+                value: 0,
+                success: 0,
+                date: "05/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 6,
+                value: 0,
+                success: 0,
+                date: "06/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 7,
+                value: 0,
+                success: 0,
+                date: "07/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 8,
+                value: 0,
+                success: 0,
+                date: "08/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 9,
+                value: 0,
+                success: 0,
+                date: "09/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 10,
+                value: 0,
+                success: 0,
+                date: "10/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 11,
+                value: 0,
+                success: 0,
+                date: "11/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 12,
+                value: 0,
+                success: 0,
+                date: "12/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 13,
+                value: 0,
+                success: 0,
+                date: "13/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 14,
+                value: 0,
+                success: 0,
+                date: "14/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 15,
+                value: 0,
+                success: 0,
+                date: "15/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 16,
+                value: 0,
+                success: 0,
+                date: "16/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 17,
+                value: 0,
+                success: 0,
+                date: "17/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 18,
+                value: 0,
+                success: 0,
+                date: "18/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 19,
+                value: 0,
+                success: 0,
+                date: "19/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 20,
+                value: 0,
+                success: 0,
+                date: "20/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 21,
+                value: 0,
+                success: 0,
+                date: "21/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 22,
+                value: 0,
+                success: 0,
+                date: "22/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 23,
+                value: 0,
+                success: 0,
+                date: "23/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 24,
+                value: 0,
+                success: 0,
+                date: "24/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 25,
+                value: 0,
+                success: 0,
+                date: "25/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 26,
+                value: 0,
+                success: 0,
+                date: "26/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 27,
+                value: 0,
+                success: 0,
+                date: "27/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 28,
+                value: 0,
+                success: 0,
+                date: "28/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 29,
+                value: 0,
+                success: 0,
+                date: "29/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 30,
+                value: 0,
+                success: 0,
+                date: "30/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }, {
+                day: 31,
+                value: 0,
+                success: 0,
+                date: "31/",
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            }];
+
+            var month_total = {
+                value: 0,
+                success: 0,
+                in_: 0,
+                in_success: 0,
+                out_: 0,
+                out_success: 0
+            };
 
 
+            //
+            // var icutype_report = [{
+            //     label: "Bilinmiyor/Yok",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "Yenidoğan",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "Çocuk",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "Dahiliye",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "Reanimasyon",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "Nöroloji",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "Beyin Cerrahi",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "Koroner",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "KVC",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "Yanık",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }, {
+            //     label: "Mikrocerrahi",
+            //     value: 0,
+            //     success: 0,
+            //     in_: 0,
+            //     in_success: 0,
+            //     out_: 0,
+            //     out_success: 0
+            // }];
+            //
 
+            var province_report = [{
+                label: "Bilinmiyor",
+                value: 0,
+                success: 0
+            }, {
+                label: "Adana",
+                value: 0,
+                success: 0
+            }, {
+                label: "Adıyaman",
+                value: 0,
+                success: 0
+            }, {
+                label: "Afyonkarahisar",
+                value: 0,
+                success: 0
+            }, {
+                label: "Ağrı",
+                value: 0,
+                success: 0
+            }, {
+                label: "Amasya",
+                value: 0,
+                success: 0
+            }, {
+                label: "Ankara",
+                value: 0,
+                success: 0
+            }, {
+                label: "Antalya",
+                value: 0,
+                success: 0
+            }, {
+                label: "Artvin",
+                value: 0,
+                success: 0
+            }, {
+                label: "Aydın",
+                value: 0,
+                success: 0
+            }, {
+                label: "Balıkesir",
+                value: 0,
+                success: 0
+            }, {
+                label: "Bilecik",
+                value: 0,
+                success: 0
+            }, {
+                label: "Bingöl",
+                value: 0,
+                success: 0
+            }, {
+                label: "Bitlis",
+                value: 0,
+                success: 0
+            }, {
+                label: "Bolu",
+                value: 0,
+                success: 0
+            }, {
+                label: "Burdur",
+                value: 0,
+                success: 0
+            }, {
+                label: "Bursa",
+                value: 0,
+                success: 0
+            }, {
+                label: "Çanakkale",
+                value: 0,
+                success: 0
+            }, {
+                label: "Çankırı",
+                value: 0,
+                success: 0
+            }, {
+                label: "Çorum",
+                value: 0,
+                success: 0
+            }, {
+                label: "Denizli",
+                value: 0,
+                success: 0
+            }, {
+                label: "Diyarbakır",
+                value: 0,
+                success: 0
+            }, {
+                label: "Edirne",
+                value: 0,
+                success: 0
+            }, {
+                label: "Elazığ",
+                value: 0,
+                success: 0
+            }, {
+                label: "Erzincan",
+                value: 0,
+                success: 0
+            }, {
+                label: "Erzurum",
+                value: 0,
+                success: 0
+            }, {
+                label: "Eskişehir",
+                value: 0,
+                success: 0
+            }, {
+                label: "Gaziantep",
+                value: 0,
+                success: 0
+            }, {
+                label: "Giresun",
+                value: 0,
+                success: 0
+            }, {
+                label: "Gümüşhane",
+                value: 0,
+                success: 0
+            }, {
+                label: "Hakkâri",
+                value: 0,
+                success: 0
+            }, {
+                label: "Hatay",
+                value: 0,
+                success: 0
+            }, {
+                label: "Isparta",
+                value: 0,
+                success: 0
+            }, {
+                label: "Mersin",
+                value: 0,
+                success: 0
+            }, {
+                label: "İstanbul",
+                value: 0,
+                success: 0
+            }, {
+                label: "İzmir",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kars",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kastamonu",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kayseri",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kırklareli",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kırşehir",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kocaeli",
+                value: 0,
+                success: 0
+            }, {
+                label: "Konya",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kütahya",
+                value: 0,
+                success: 0
+            }, {
+                label: "Malatya",
+                value: 0,
+                success: 0
+            }, {
+                label: "Manisa",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kahramanmaraş",
+                value: 0,
+                success: 0
+            }, {
+                label: "Mardin",
+                value: 0,
+                success: 0
+            }, {
+                label: "Muğla",
+                value: 0,
+                success: 0
+            }, {
+                label: "Muş",
+                value: 0,
+                success: 0
+            }, {
+                label: "Nevşehir",
+                value: 0,
+                success: 0
+            }, {
+                label: "Niğde",
+                value: 0,
+                success: 0
+            }, {
+                label: "Ordu",
+                value: 0,
+                success: 0
+            }, {
+                label: "Rize",
+                value: 0,
+                success: 0
+            }, {
+                label: "Sakarya",
+                value: 0,
+                success: 0
+            }, {
+                label: "Samsun",
+                value: 0,
+                success: 0
+            }, {
+                label: "Siirt",
+                value: 0,
+                success: 0
+            }, {
+                label: "Sinop",
+                value: 0,
+                success: 0
+            }, {
+                label: "Sivas",
+                value: 0,
+                success: 0
+            }, {
+                label: "Tekirdağ",
+                value: 0,
+                success: 0
+            }, {
+                label: "Tokat",
+                value: 0,
+                success: 0
+            }, {
+                label: "Trabzon",
+                value: 0,
+                success: 0
+            }, {
+                label: "Tunceli",
+                value: 0,
+                success: 0
+            }, {
+                label: "Şanlıurfa",
+                value: 0,
+                success: 0
+            }, {
+                label: "Uşak",
+                value: 0,
+                success: 0
+            }, {
+                label: "Van",
+                value: 0,
+                success: 0
+            }, {
+                label: "Yozgat",
+                value: 0,
+                success: 0
+            }, {
+                label: "Zonguldak",
+                value: 0,
+                success: 0
+            }, {
+                label: "Aksaray",
+                value: 0,
+                success: 0
+            }, {
+                label: "Bayburt",
+                value: 0,
+                success: 0
+            }, {
+                label: "Karaman",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kırıkkale",
+                value: 0,
+                success: 0
+            }, {
+                label: "Batman",
+                value: 0,
+                success: 0
+            }, {
+                label: "Şırnak",
+                value: 0,
+                success: 0
+            }, {
+                label: "Bartın",
+                value: 0,
+                success: 0
+            }, {
+                label: "Ardahan",
+                value: 0,
+                success: 0
+            }, {
+                label: "Iğdır",
+                value: 0,
+                success: 0
+            }, {
+                label: "Yalova",
+                value: 0,
+                success: 0
+            }, {
+                label: "Karabük",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kilis",
+                value: 0,
+                success: 0
+            }, {
+                label: "Osmaniye",
+                value: 0,
+                success: 0
+            }, {
+                label: "Düzce",
+                value: 0,
+                success: 0
+            }];
 
-function getMonthIcu() {
+            var hospital_report = [{
+                label: "Bilinmiyor",
+                value: 0,
+                success: 0
+            }, {
+                label: "ADH",
+                value: 0,
+                success: 0
+            }, {
+                label: "ÇDH",
+                value: 0,
+                success: 0
+            }, {
+                label: "Numune",
+                value: 0,
+                success: 0
+            }, {
+                label: "Balcalı",
+                value: 0,
+                success: 0
+            }, {
+                label: "Marsa",
+                value: 0,
+                success: 0
+            }, {
+                label: "Meydan",
+                value: 0,
+                success: 0
+            }, {
+                label: "SUH",
+                value: 0,
+                success: 0
+            }, {
+                label: "Y. Başkent",
+                value: 0,
+                success: 0
+            }, {
+                label: "S. Başkent",
+                value: 0,
+                success: 0
+            }, {
+                label: "Medline",
+                value: 0,
+                success: 0
+            }, {
+                label: "Ortadoğu",
+                value: 0,
+                success: 0
+            }, {
+                label: "Ö. Adana",
+                value: 0,
+                success: 0
+            }, {
+                label: "G. Adana",
+                value: 0,
+                success: 0
+            }, {
+                label: "Algomed",
+                value: 0,
+                success: 0
+            }, {
+                label: "Acıbadem",
+                value: 0,
+                success: 0
+            }, {
+                label: "Metro",
+                value: 0,
+                success: 0
+            }, {
+                label: "EPC",
+                value: 0,
+                success: 0
+            }, {
+                label: "Kozan Devlet",
+                value: 0,
+                success: 0
+            }, {
+                label: "Ceyhan Devlet",
+                value: 0,
+                success: 0
+            }];
 
-        var day_report = [{
-            day: 1,
-            value: 0,
-            success: 0,
-            date: "01/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 2,
-            value: 0,
-            success: 0,
-            date: "02/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 3,
-            value: 0,
-            success: 0,
-            date: "03/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 4,
-            value: 0,
-            success: 0,
-            date: "04/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 5,
-            value: 0,
-            success: 0,
-            date: "05/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 6,
-            value: 0,
-            success: 0,
-            date: "06/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 7,
-            value: 0,
-            success: 0,
-            date: "07/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 8,
-            value: 0,
-            success: 0,
-            date: "08/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 9,
-            value: 0,
-            success: 0,
-            date: "09/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 10,
-            value: 0,
-            success: 0,
-            date: "10/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 11,
-            value: 0,
-            success: 0,
-            date: "11/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 12,
-            value: 0,
-            success: 0,
-            date: "12/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 13,
-            value: 0,
-            success: 0,
-            date: "13/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 14,
-            value: 0,
-            success: 0,
-            date: "14/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 15,
-            value: 0,
-            success: 0,
-            date: "15/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 16,
-            value: 0,
-            success: 0,
-            date: "16/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 17,
-            value: 0,
-            success: 0,
-            date: "17/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 18,
-            value: 0,
-            success: 0,
-            date: "18/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 19,
-            value: 0,
-            success: 0,
-            date: "19/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 20,
-            value: 0,
-            success: 0,
-            date: "20/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 21,
-            value: 0,
-            success: 0,
-            date: "21/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 22,
-            value: 0,
-            success: 0,
-            date: "22/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 23,
-            value: 0,
-            success: 0,
-            date: "23/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 24,
-            value: 0,
-            success: 0,
-            date: "24/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 25,
-            value: 0,
-            success: 0,
-            date: "25/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 26,
-            value: 0,
-            success: 0,
-            date: "26/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 27,
-            value: 0,
-            success: 0,
-            date: "27/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 28,
-            value: 0,
-            success: 0,
-            date: "28/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 29,
-            value: 0,
-            success: 0,
-            date: "29/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 30,
-            value: 0,
-            success: 0,
-            date: "30/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            day: 31,
-            value: 0,
-            success: 0,
-            date: "31/",
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }];
-
-        var month_total = {
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        };
-
-        var icutype_report = [{
-            label: "Bilinmiyor/Yok",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "Yenidoğan",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "Çocuk",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "Dahiliye",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "Reanimasyon",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "Nöroloji",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "Beyin Cerrahi",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "Koroner",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "KVC",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "Yanık",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }, {
-            label: "Mikrocerrahi",
-            value: 0,
-            success: 0,
-            in_: 0,
-            in_success: 0,
-            out_: 0,
-            out_success: 0
-        }];
-
-
-        var province_report = [{
-            label: "Bilinmiyor",
-            value: 0,
-            success: 0
-        }, {
-            label: "Adana",
-            value: 0,
-            success: 0
-        }, {
-            label: "Adıyaman",
-            value: 0,
-            success: 0
-        }, {
-            label: "Afyonkarahisar",
-            value: 0,
-            success: 0
-        }, {
-            label: "Ağrı",
-            value: 0,
-            success: 0
-        }, {
-            label: "Amasya",
-            value: 0,
-            success: 0
-        }, {
-            label: "Ankara",
-            value: 0,
-            success: 0
-        }, {
-            label: "Antalya",
-            value: 0,
-            success: 0
-        }, {
-            label: "Artvin",
-            value: 0,
-            success: 0
-        }, {
-            label: "Aydın",
-            value: 0,
-            success: 0
-        }, {
-            label: "Balıkesir",
-            value: 0,
-            success: 0
-        }, {
-            label: "Bilecik",
-            value: 0,
-            success: 0
-        }, {
-            label: "Bingöl",
-            value: 0,
-            success: 0
-        }, {
-            label: "Bitlis",
-            value: 0,
-            success: 0
-        }, {
-            label: "Bolu",
-            value: 0,
-            success: 0
-        }, {
-            label: "Burdur",
-            value: 0,
-            success: 0
-        }, {
-            label: "Bursa",
-            value: 0,
-            success: 0
-        }, {
-            label: "Çanakkale",
-            value: 0,
-            success: 0
-        }, {
-            label: "Çankırı",
-            value: 0,
-            success: 0
-        }, {
-            label: "Çorum",
-            value: 0,
-            success: 0
-        }, {
-            label: "Denizli",
-            value: 0,
-            success: 0
-        }, {
-            label: "Diyarbakır",
-            value: 0,
-            success: 0
-        }, {
-            label: "Edirne",
-            value: 0,
-            success: 0
-        }, {
-            label: "Elazığ",
-            value: 0,
-            success: 0
-        }, {
-            label: "Erzincan",
-            value: 0,
-            success: 0
-        }, {
-            label: "Erzurum",
-            value: 0,
-            success: 0
-        }, {
-            label: "Eskişehir",
-            value: 0,
-            success: 0
-        }, {
-            label: "Gaziantep",
-            value: 0,
-            success: 0
-        }, {
-            label: "Giresun",
-            value: 0,
-            success: 0
-        }, {
-            label: "Gümüşhane",
-            value: 0,
-            success: 0
-        }, {
-            label: "Hakkâri",
-            value: 0,
-            success: 0
-        }, {
-            label: "Hatay",
-            value: 0,
-            success: 0
-        }, {
-            label: "Isparta",
-            value: 0,
-            success: 0
-        }, {
-            label: "Mersin",
-            value: 0,
-            success: 0
-        }, {
-            label: "İstanbul",
-            value: 0,
-            success: 0
-        }, {
-            label: "İzmir",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kars",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kastamonu",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kayseri",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kırklareli",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kırşehir",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kocaeli",
-            value: 0,
-            success: 0
-        }, {
-            label: "Konya",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kütahya",
-            value: 0,
-            success: 0
-        }, {
-            label: "Malatya",
-            value: 0,
-            success: 0
-        }, {
-            label: "Manisa",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kahramanmaraş",
-            value: 0,
-            success: 0
-        }, {
-            label: "Mardin",
-            value: 0,
-            success: 0
-        }, {
-            label: "Muğla",
-            value: 0,
-            success: 0
-        }, {
-            label: "Muş",
-            value: 0,
-            success: 0
-        }, {
-            label: "Nevşehir",
-            value: 0,
-            success: 0
-        }, {
-            label: "Niğde",
-            value: 0,
-            success: 0
-        }, {
-            label: "Ordu",
-            value: 0,
-            success: 0
-        }, {
-            label: "Rize",
-            value: 0,
-            success: 0
-        }, {
-            label: "Sakarya",
-            value: 0,
-            success: 0
-        }, {
-            label: "Samsun",
-            value: 0,
-            success: 0
-        }, {
-            label: "Siirt",
-            value: 0,
-            success: 0
-        }, {
-            label: "Sinop",
-            value: 0,
-            success: 0
-        }, {
-            label: "Sivas",
-            value: 0,
-            success: 0
-        }, {
-            label: "Tekirdağ",
-            value: 0,
-            success: 0
-        }, {
-            label: "Tokat",
-            value: 0,
-            success: 0
-        }, {
-            label: "Trabzon",
-            value: 0,
-            success: 0
-        }, {
-            label: "Tunceli",
-            value: 0,
-            success: 0
-        }, {
-            label: "Şanlıurfa",
-            value: 0,
-            success: 0
-        }, {
-            label: "Uşak",
-            value: 0,
-            success: 0
-        }, {
-            label: "Van",
-            value: 0,
-            success: 0
-        }, {
-            label: "Yozgat",
-            value: 0,
-            success: 0
-        }, {
-            label: "Zonguldak",
-            value: 0,
-            success: 0
-        }, {
-            label: "Aksaray",
-            value: 0,
-            success: 0
-        }, {
-            label: "Bayburt",
-            value: 0,
-            success: 0
-        }, {
-            label: "Karaman",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kırıkkale",
-            value: 0,
-            success: 0
-        }, {
-            label: "Batman",
-            value: 0,
-            success: 0
-        }, {
-            label: "Şırnak",
-            value: 0,
-            success: 0
-        }, {
-            label: "Bartın",
-            value: 0,
-            success: 0
-        }, {
-            label: "Ardahan",
-            value: 0,
-            success: 0
-        }, {
-            label: "Iğdır",
-            value: 0,
-            success: 0
-        }, {
-            label: "Yalova",
-            value: 0,
-            success: 0
-        }, {
-            label: "Karabük",
-            value: 0,
-            success: 0
-        }, {
-            label: "Kilis",
-            value: 0,
-            success: 0
-        }, {
-            label: "Osmaniye",
-            value: 0,
-            success: 0
-        }, {
-            label: "Düzce",
-            value: 0,
-            success: 0
-        }];
-
-        var hospital_report =  [
-          { label: "Bilinmiyor", value: 0, success: 0 },
-          { label: "ADH", value: 0, success: 0 },
-          { label: "ÇDH", value: 0, success: 0 },
-          { label: "Numune", value: 0, success: 0 },
-          { label: "Balcalı", value: 0, success: 0 },
-          { label: "Marsa", value: 0, success: 0 },
-          { label: "Meydan", value: 0, success: 0 },
-          { label: "SUH", value: 0, success: 0 },
-          { label: "Y. Başkent", value: 0, success: 0 },
-          { label: "S. Başkent", value: 0, success: 0 },
-          { label: "Medline", value: 0, success: 0 },
-          { label: "Ortadoğu", value: 0, success: 0 },
-          { label: "Ö. Adana", value: 0, success: 0 },
-          { label: "G. Adana", value: 0, success: 0 },
-          { label: "Algomed", value: 0, success: 0 },
-          { label: "Acıbadem", value: 0, success: 0 },
-          { label: "Metro", value: 0, success: 0 },
-          { label: "EPC", value: 0, success: 0 },
-          { label: "Kozan Devlet", value: 0, success: 0 },
-          { label: "Ceyhan Devlet", value: 0, success: 0 }
-        ];
-
-        var user_report = [
-          { label: "Yok", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
-          { label: "Murat Arıca", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
-          { label: "Ayla Aslantaş", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
-          { label: "Fulya Sağmak", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
-          { label: "Özlem Çelik", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
-          { label: "Birsen Günbaz", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
-          { label: "Elvan Aydın Gök", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
-          { label: "Güray Özalp", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
-          { label: "Yeter Ağdak", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 },
-          { label: "Zühal Kocatepe", v0: 0, v1: 0, v2: 0, v3: 0, v4: 0, v5: 0, v6: 0, v7: 0,
-                    v8: 0, v9: 0, v10: 0, v11: 0, v12: 0, v13: 0, v14: 0, v15: 0,
-                    v16: 0, v17: 0, v18: 0, v19: 0, v20: 0, v21: 0, value: 0 }
-        ];
+            var user_report = [{
+                label: "Yok",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }, {
+                label: "Murat Arıca",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }, {
+                label: "Ayla Aslantaş",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }, {
+                label: "Fulya Sağmak",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }, {
+                label: "Özlem Çelik",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }, {
+                label: "Birsen Günbaz",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }, {
+                label: "Elvan Aydın Gök",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }, {
+                label: "Güray Özalp",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }, {
+                label: "Yeter Ağdak",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }, {
+                label: "Zühal Kocatepe",
+                v0: 0,
+                v1: 0,
+                v2: 0,
+                v3: 0,
+                v4: 0,
+                v5: 0,
+                v6: 0,
+                v7: 0,
+                v8: 0,
+                v9: 0,
+                v10: 0,
+                v11: 0,
+                v12: 0,
+                v13: 0,
+                v14: 0,
+                v15: 0,
+                v16: 0,
+                v17: 0,
+                v18: 0,
+                v19: 0,
+                v20: 0,
+                v21: 0,
+                value: 0
+            }];
 
 
 
@@ -1083,8 +1344,8 @@ function getMonthIcu() {
                 data_Type: "JSON",
                 cache: false,
                 success: function(data) {
-                  icu = JSON.parse(data).data;
-                  //console.log(icu);
+                    icu = JSON.parse(data).data;
+                    //console.log(icu);
 
                     for (i = 0; i < icu.length; i++) {
                         day = parseInt(icu[i].date.substring(0, 2));
@@ -1143,76 +1404,76 @@ function getMonthIcu() {
                     }
 
                     for (i = 0; i < icu.length; i++) {
-                        switch(icu[i].success) {
-                          case 0:
-                              user_report[icu[i].user].v0 += 1;
-                              break;
-                          case 1:
-                              user_report[icu[i].user].v1 += 1;
-                              break;
-                          case 2:
-                              user_report[icu[i].user].v2 += 1;
-                              break;
-                          case 3:
-                              user_report[icu[i].user].v3 += 1;
-                              break;
-                          case 4:
-                              user_report[icu[i].user].v4 += 1;
-                              break;
-                          case 5:
-                              user_report[icu[i].user].v5 += 1;
-                              break;
-                          case 6:
-                              user_report[icu[i].user].v6 += 1;
-                              break;
-                          case 7:
-                              user_report[icu[i].user].v7 += 1;
-                              break;
-                          case 8:
-                              user_report[icu[i].user].v8 += 1;
-                              break;
-                          case 9:
-                              user_report[icu[i].user].v9 += 1;
-                              break;
-                          case 10:
-                              user_report[icu[i].user].v10 += 1;
-                              break;
-                          case 11:
-                              user_report[icu[i].user].v11 += 1;
-                              break;
-                          case 12:
-                              user_report[icu[i].user].v12 += 1;
-                              break;
-                          case 13:
-                              user_report[icu[i].user].v13 += 1;
-                              break;
-                          case 14:
-                              user_report[icu[i].user].v14 += 1;
-                              break;
-                          case 15:
-                              user_report[icu[i].user].v15 += 1;
-                              break;
-                          case 16:
-                              user_report[icu[i].user].v16 += 1;
-                              break;
-                          case 17:
-                              user_report[icu[i].user].v17 += 1;
-                              break;
-                          case 18:
-                              user_report[icu[i].user].v18 += 1;
-                              break;
-                          case 19:
-                              user_report[icu[i].user].v19 += 1;
-                              break;
-                          case 20:
-                              user_report[icu[i].user].v20 += 1;
-                              break;
-                          case 21:
-                              user_report[icu[i].user].v21 += 1;
-                              break;
-                          default:
-                         }
-                       }
+                        switch (icu[i].success) {
+                            case 0:
+                                user_report[icu[i].user].v0 += 1;
+                                break;
+                            case 1:
+                                user_report[icu[i].user].v1 += 1;
+                                break;
+                            case 2:
+                                user_report[icu[i].user].v2 += 1;
+                                break;
+                            case 3:
+                                user_report[icu[i].user].v3 += 1;
+                                break;
+                            case 4:
+                                user_report[icu[i].user].v4 += 1;
+                                break;
+                            case 5:
+                                user_report[icu[i].user].v5 += 1;
+                                break;
+                            case 6:
+                                user_report[icu[i].user].v6 += 1;
+                                break;
+                            case 7:
+                                user_report[icu[i].user].v7 += 1;
+                                break;
+                            case 8:
+                                user_report[icu[i].user].v8 += 1;
+                                break;
+                            case 9:
+                                user_report[icu[i].user].v9 += 1;
+                                break;
+                            case 10:
+                                user_report[icu[i].user].v10 += 1;
+                                break;
+                            case 11:
+                                user_report[icu[i].user].v11 += 1;
+                                break;
+                            case 12:
+                                user_report[icu[i].user].v12 += 1;
+                                break;
+                            case 13:
+                                user_report[icu[i].user].v13 += 1;
+                                break;
+                            case 14:
+                                user_report[icu[i].user].v14 += 1;
+                                break;
+                            case 15:
+                                user_report[icu[i].user].v15 += 1;
+                                break;
+                            case 16:
+                                user_report[icu[i].user].v16 += 1;
+                                break;
+                            case 17:
+                                user_report[icu[i].user].v17 += 1;
+                                break;
+                            case 18:
+                                user_report[icu[i].user].v18 += 1;
+                                break;
+                            case 19:
+                                user_report[icu[i].user].v19 += 1;
+                                break;
+                            case 20:
+                                user_report[icu[i].user].v20 += 1;
+                                break;
+                            case 21:
+                                user_report[icu[i].user].v21 += 1;
+                                break;
+                            default:
+                        }
+                    }
 
                     for (i = 0; i < day_report.length; i++) {
                         day_report[i].date = day_report[i].date + report_date[1] + "/" + report_date[0];
@@ -1243,6 +1504,12 @@ function getMonthIcu() {
             template: "#template",
             data: {
 
+                _insurance: getInsurance(),
+                _user: getUser(),
+                _icu_type: getIcuType(),
+                _hospital: getHospital(),
+                _province: getProvince(),
+                _success: getSuccess(),
                 report_date: new Date().toJSON().substring(0, 7),
                 report: "d_report",
                 success: 0,
@@ -1256,26 +1523,141 @@ function getMonthIcu() {
                 display_d_report: true,
                 display_i_report: false,
                 display_p_report: false,
-                successName:  [ "Yerleştirilemedi", "İptal", "Servis Hastası", "ADH",
-                                 "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
-                                  "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
-                                  "G. Adana", "Algomed", "Acıbadem", "Metro", "EPC", "Kozan Devlet",
-                                  "Ceyhan Devlet"]
+                successName: ["Yerleştirilemedi", "İptal", "Servis Hastası", "ADH",
+                    "ÇDH", "Numune", "Balcalı", "Marsa", "Meydan",
+                    "SUH", "Y. Başkent", "S. Başkent", "Medline", "Ortadoğu", "Ö. Adana",
+                    "G. Adana", "Algomed", "Acıbadem", "Metro", "EPC", "Kozan Devlet",
+                    "Ceyhan Devlet"
+                ]
             }
         });
 
         getMonthIcu();
 
         ractive.observe("report", function(newValue, oldValue) {
-          ractive.set("display_" + newValue, true);
-          if(oldValue != undefined)
-          ractive.set("display_" + oldValue, false);
-          });
-
-        ractive.on("date_change", function(event) {
-          getMonthIcu();
+            ractive.set("display_" + newValue, true);
+            if (oldValue != undefined)
+                ractive.set("display_" + oldValue, false);
         });
 
+        ractive.on("date_change", function(event) {
+            getMonthIcu();
+        });
+
+
+
+        function getInsurance() {
+
+            $.ajax({
+                type: "GET",
+                url: "/api/get/insurance",
+                data_Type: "JSON",
+                cache: false,
+                success: function(data) {
+                    ractive.set("_insurance", JSON.parse(data));
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.log(err);
+                }.bind(this)
+            });
+        };
+
+        function getUser() {
+
+            $.ajax({
+                type: "GET",
+                url: "/api/get/user",
+                data_Type: "JSON",
+                cache: false,
+                success: function(data) {
+                    ractive.set("_user", JSON.parse(data));
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.log(err);
+                }.bind(this)
+            });
+        };
+
+        function getIcuType() {
+
+            $.ajax({
+                type: "GET",
+                url: "/api/get/icu_type",
+                data_Type: "JSON",
+                cache: false,
+                success: function(data) {
+                    ractive.set("_icu_type", JSON.parse(data));
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.log(err);
+                }.bind(this)
+            });
+        };
+
+        function getProvince() {
+
+            $.ajax({
+                type: "GET",
+                url: "/api/get/province",
+                data_Type: "JSON",
+                cache: false,
+                success: function(data) {
+                    ractive.set("_province", JSON.parse(data));
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.log(err);
+                }.bind(this)
+            });
+        };
+
+        function getHospital() {
+
+            $.ajax({
+                type: "GET",
+                url: "/api/get/hospital",
+                data_Type: "JSON",
+                cache: false,
+                success: function(data) {
+                    ractive.set("_hospital", JSON.parse(data));
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.log(err);
+                }.bind(this)
+            });
+        };
+
+        function getSuccess() {
+
+            $.ajax({
+                type: "GET",
+                url: "/api/get/success",
+                data_Type: "JSON",
+                cache: false,
+                success: function(data) {
+                    ractive.set("_success", JSON.parse(data));
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.log(err);
+                }.bind(this)
+            });
+        };
+
+        function report_sceletion() {
+            icu_type = ractive.get("_icu_type");
+            var icutype_report = [];
+
+            for (i = 0; i < icu_type.data.length; i++) {
+                icutype_report.push({
+                    label: icu_type.data[i].name,
+                    value: 0,
+                    success: 0,
+                    in_: 0,
+                    in_success: 0,
+                    out_: 0,
+                    out_success: 0
+                });
+            }
+        }
     </script>
 </body>
 

@@ -51,6 +51,43 @@ convert_to_json(Lines) ->
    JsonData  = {obj, [{data, Data}]},
    rfc4627:encode(JsonData).
 
+   convert_to_json_records(Table, Lines) ->
+
+     case Table of
+       insurance ->
+         Data    =  [{obj,
+            [ { code,     Line#insurance.code },
+              { name,     Line#insurance.name  }
+            ]} || Line <- Lines ];
+      user ->
+        Data    =  [{obj,
+           [ { code,     Line#user.code },
+             { name,     Line#user.name  }
+           ]} || Line <- Lines ];
+      icu_type ->
+        Data    =  [{obj,
+          [ { code,     Line#icu_type.code },
+            { name,     Line#icu_type.name  }
+            ]} || Line <- Lines ];
+      success ->
+        Data    =  [{obj,
+          [ { code,     Line#success.code },
+            { name,     Line#success.name  }
+            ]} || Line <- Lines ];
+      province ->
+        Data    =  [{obj,
+          [ { code,     Line#province.code },
+            { name,     Line#province.name  }
+          ]} || Line <- Lines ];
+      hospital ->
+        Data    =  [{obj,
+          [ { code,     Line#hospital.code },
+            { name,     Line#hospital.name  }
+          ]} || Line <- Lines ]
+    end,
+    JsonData  = {obj, [{data, Data}]},
+      rfc4627:encode(JsonData).
+
 method(Arg) ->
   Rec = Arg#arg.req,
   Rec#http_request.method.
@@ -157,6 +194,24 @@ handle('POST', Arg) ->
       {header, "Allow: GET, HEAD, POST, PUT, DELETE"}].
 
 
+              handle('GET', _Arg, ["api", "get", Table]) ->
+                 io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Table]),
+                Fun = fun() ->
+                  Q = qlc:q([X || X <- mnesia:table(list_to_atom(Table))]),
+                  qlc:e(Q)
+                end,
+                { atomic, Records } = mnesia:transaction(Fun),
+                 io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Records]),
+                Json = convert_to_json_records(list_to_atom(Table), Records),
+            %    io:format("~n ~p:~p GET Request Response ~p ~n", [?MODULE, ?LINE, Json]),
+
+                [{status, 200},
+                  {header, {content_type, "text/html; charset=UTF-8"}},
+                  {header, {"Access-Control-Allow-Origin", "http://localhost:8000"}},
+                  {html, Json}
+                ];
+
+
       handle('GET', _Arg, ["api", Year, Month]) ->
 
 %        io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
@@ -173,8 +228,9 @@ handle('POST', Arg) ->
         ];
 
 
-  % handle('GET', _Arg, ["api"]) ->
+    % handle('GET', _Arg, ["api"]) ->
   %
+
   %     io:format("~n ~p:~p GET Request", [?MODULE, ?LINE]),
   %
   %     Fun = fun() ->
